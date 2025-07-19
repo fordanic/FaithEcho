@@ -56,7 +56,7 @@
 - [ ] Add credential rotation endpoint `/admin/rotate-gcp`
 - [ ] Write Playwright E2E tests for admin flows
 
-## Milestone 6 — Listener SPA
+## Milestone 6 — Listener Interface
 - [ ] Scaffold Streamlit app under `/ui`
 - [ ] Implement captions overlay Web Component
 - [ ] Add language selector & latency indicator widget
