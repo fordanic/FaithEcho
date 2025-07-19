@@ -38,7 +38,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 * Provide live captions, language selector, text‑size control, volume/mute, latency indicator, and reconnect/report button.
 * Mobile‑first responsive design that works on the latest Chrome, Safari, and Edge browsers.
 * Display a warning if latency exceeds 3 seconds.
-* Implemented using **Streamlit** served by FastAPI.
+* Implemented using **Streamlit**.
 
 ### Admin Interface
 
