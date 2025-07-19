@@ -66,7 +66,7 @@
 - [ ] Gracefully degrade to direct GCP calls if any microservice unavailable
 - [ ] Emit per‑language AAC frames to FIFO pipes
 
-### hls\_packager
+### `hls_packager`
 
 - [ ] Spawn ffmpeg with dual audio FIFO inputs
 - [ ] Produce LL‑HLS outputs and implement sliding‑window cleanup
