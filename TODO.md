@@ -15,10 +15,10 @@
  - [x] Initialise internal Python package `faith_echo`
 
 ## Milestone 2 — Local development environment
-- [ ] Create `.devcontainer/` definition for VS Code Remote‑Containers
-- [ ] Implement `docker compose up --build` one‑liner for full stack
-- [ ] Provide `scripts/dev‑proxy.sh` with mkcert TLS automation
-- [ ] Update `README.md` with setup / teardown instructions
+- [x] Create `.devcontainer/` definition for VS Code Remote‑Containers
+- [x] Implement skeleton `docker-compose.yml` so `docker compose up --build` starts the stack
+- [x] Provide `scripts/dev‑proxy.sh` with mkcert TLS automation
+- [x] Update `README.md` with setup / teardown instructions
 
 ## Milestone 2.5 — Language service scaffolding
 - [ ] Create base classes for STT, translation and TTS

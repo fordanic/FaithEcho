@@ -62,16 +62,19 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 3. Ensure your Google Cloud project has the **Speech‑to‑Text**, **Translate** and **Text‑to‑Speech** APIs enabled and that
    the service account key referenced in `.env` has the necessary IAM roles.
 
-4. Start the stack:
+4. *(Optional)* Open the repo in VS Code using **Remote-Containers**. The `.devcontainer/` directory contains a ready-to-use environment.
+5. Start the stack:
 
    ```bash
    docker compose up --build
    ```
 
-5. Point the church sound desk’s RTMP output at `rtmp://<edge>:1935/live/source` (default).
+6. Point the church sound desk’s RTMP output at `rtmp://<edge>:1935/live/source` (default).
    Open **[http://faithecho.local](http://faithecho.local)** on a phone to listen.
 
-Logs are streamed to the console; stop with Ctrl‑C.
+7. *(Optional)* Generate a local TLS certificate with `./scripts/dev-proxy.sh` if you want to serve the UI over HTTPS.
+
+Stop the stack with `Ctrl‑C` and run `docker compose down -v` to clean up.
 
 ## Production Deployment
 
