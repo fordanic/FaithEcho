@@ -57,7 +57,7 @@
 - [ ] Output raw 16 kHz mono PCM to stdout
 - [ ] Add unit test using `.wav` fixture and local ffmpeg
 
-### pipeline\_orchestrator
+### `pipeline_orchestrator`
 
 - [ ] Scaffold FastAPI service with `/captions` WebSocket and `/metrics`
 - [ ] Consume audio from `ingest_ffmpeg` and fan‑out to STT microservice client
