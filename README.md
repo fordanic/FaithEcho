@@ -26,7 +26,7 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 * **Docker 24** / **docker‑compose**
 * **Nginx** static server & reverse proxy
 * Listener interface built with **Streamlit**
-* Admin interface built with **Streamlit**.
+* Admin interface built with **Streamlit**
 
 ## Repository Layout
 
