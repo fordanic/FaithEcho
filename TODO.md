@@ -6,13 +6,13 @@
 - [x] Enable Dependabot, branch protection rules & CODEOWNERS
 
 ## Milestone 1 — Repository & project structure
-- [ ] Copy / verify skeleton directories (`/edge`, `/scripts`, `/ui`, etc.)
-- [ ] Add `/docs` for diagrams & ADRs
-- [ ] Add `.github/workflows` directory
-- [ ] Add monorepo tooling: `pre‑commit`, `ruff`
-- [ ] Create top‑level `Makefile` or `Taskfile.yml`
-- [ ] Configure Poetry or pip‑tools lockfile under `/src/`
-- [ ] Initialise internal Python package `faith_echo`
+ - [x] Copy / verify skeleton directories (`/edge`, `/scripts`, `/ui`, etc.)
+ - [x] Add `/docs` for diagrams & ADRs
+ - [x] Add `.github/workflows` directory
+ - [x] Add monorepo tooling: `pre‑commit`, `ruff`
+ - [x] Create top‑level `Makefile` or `Taskfile.yml`
+ - [x] Configure Poetry or pip‑tools lockfile under `/src/`
+ - [x] Initialise internal Python package `faith_echo`
 
 ## Milestone 2 — Local development environment
 - [ ] Create `.devcontainer/` definition for VS Code Remote‑Containers

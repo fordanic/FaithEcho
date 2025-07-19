@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "faith-echo"
+version = "0.1.0"
+description = "Real-time Swedish to English/French translation service"
+authors = ["FaithEcho Contributors <noreply@example.com>"]
+readme = "README.md"
+packages = [{ include = "faith_echo", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.4"
+pytest = "^8.4.1"
+mypy = "^1.17.0"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
