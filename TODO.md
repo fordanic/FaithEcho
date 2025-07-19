@@ -51,7 +51,7 @@
 
 ## Milestone 4 — Core pipeline containers
 
-### ingest\_ffmpeg
+### `ingest_ffmpeg`
 
 - [ ] Write entrypoint script with retrying RTMP connection
 - [ ] Output raw 16 kHz mono PCM to stdout
