@@ -32,14 +32,3 @@ updates:
     labels:
       - "dependencies"
       - "docker"
-
-  - package-ecosystem: "npm"
-    directory: "/ui"
-    schedule: { interval: "weekly" }
-    reviewers:
-      - "faith-echo/frontend-team"
-    commit-message:
-      prefix: "chore(deps)"
-    labels:
-      - "dependencies"
-      - "javascript"

@@ -14,5 +14,5 @@
             ]
         }
     },
-    "postCreateCommand": "pnpm install && poetry install --with dev --no-interaction --no-root"
+    "postCreateCommand": "pip install --upgrade pip && pip install poetry && poetry install --with dev --no-interaction --no-root"
 }
