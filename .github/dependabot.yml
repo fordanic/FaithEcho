@@ -3,15 +3,43 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule: { interval: "weekly" }
+    reviewers:
+      - "fordanic"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+      - "github_actions"
 
   - package-ecosystem: "pip"
     directory: "/"
     schedule: { interval: "weekly" }
+    reviewers:
+      - "fordanic"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+      - "python"
 
   - package-ecosystem: "docker"
     directory: "/"
     schedule: { interval: "weekly" }
+    reviewers:
+      - "fordanic"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+      - "docker"
 
   - package-ecosystem: "npm"
     directory: "/ui"
     schedule: { interval: "weekly" }
+    reviewers:
+      - "faith-echo/frontend-team"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+      - "javascript"

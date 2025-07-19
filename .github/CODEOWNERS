@@ -1,11 +1,17 @@
 # Backend pipeline
 /src/                 @fordanic
+/admin/               @fordanic
+/edge/                @fordanic
+/scripts/             @fordanic
 
 # Docker & infra
 /docker-compose.yml   @fordanic
 
 # Listener web‑app (team example)
 /ui/                  @fordanic
+
+# GitHub meta
+/.github/             @fordanic
 
 # Catch‑all
 *                     @fordanic

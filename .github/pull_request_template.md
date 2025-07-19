@@ -5,8 +5,8 @@ Explain the “what” and “why”.
 Closes #123
 
 ## Changes
-- [x] Short bullet
-- [x] Another bullet
+- [ ] Short bullet
+- [ ] Another bullet
 
 ## Checklist
 - [ ] Tests added/updated
