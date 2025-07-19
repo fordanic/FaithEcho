@@ -81,7 +81,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 |                                        |   |       | • French  LL‑HLS         |
 |  • ffmpeg (RTMP → PCM)                 |   +-------►• Captions WebSocket       |
 |  • Python pipeline (STT→MT→TTS via APIs)|           +---------------------------+
-|  • LL‑HLS packager (ffmpeg)            | 
+|  • LL‑HLS packager (ffmpeg)            |
 |  • FastAPI: /ui /captions /admin       |
 |  • Nginx: serve HLS + UI               |
 +----------------------------------------+
@@ -167,4 +167,3 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 * Recording and on‑demand replay (subject to privacy approval).
 
 ---
-

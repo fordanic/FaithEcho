@@ -27,8 +27,7 @@ FaithEcho is a real‑time Swedish→English/French translation service for chur
 ## Development Environment
 
 * Target Python: **3.12** with full **PEP 484** type hints.
-* Package manager: **Poetry** (lock file to live in `/src/`).
-* Node tooling: **pnpm** (workspace root lock‑file). Use **ES2022** modules.
+* Package manager: **Poetry**.
 * Containerisation: **Docker 24.x**; compose file is `docker-compose.yml`.
 * Provide a one‑shot local stack with:
 
@@ -69,11 +68,9 @@ Agents must *never* push images or attempt remote cloud actions; all builds run 
 # Full quality gate
 pre-commit run --all-files    # hooks: ruff, prettier, eslint
 pytest -q                     # Python unit tests
-pnpm test --filter ui...      # Front‑end unit tests (Vitest)
 mypy src/ tests/              # Static typing
 ruff format --check           # Formatting & import order are correct
 ruff check .                  # Linting passes
-docker compose build          # All images build successfully
 ```
 
 If any check fails, iterate until the pipeline is green **before** opening a PR.
@@ -119,7 +116,7 @@ PRs that fail CI or exceed LOC limits without prior discussion will be marked **
    * `fix(pipeline): add exponential back‑off to Translate requests`
    * `feat(ui): dark‑mode toggle`
    * `test(ingest_ffmpeg): ensure RTMP reconnect logic`
-3. **Safe commands:** `pytest`, `ruff`, `pnpm`, `docker compose`, `bash -c "..."`.
+3. **Safe commands:** `pytest`, `ruff`, `bash -c "..."`.
 4. **Sandboxing:** assume write access only within repo root; never create sibling directories.
 5. **Patch formatting:** include context lines and keep diff noise minimal (no unrelated whitespace churn).
 
