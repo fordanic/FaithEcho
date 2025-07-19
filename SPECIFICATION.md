@@ -97,7 +97,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 * **Runtime:** Docker 24.0 (`docker‑compose.yml`)
 
   * `ingest_ffmpeg` – Converts RTMP to raw PCM (16‑bit mono, 16 kHz) and pipes it to the pipeline container.
-  * `pipeline_worker` – Python 3.21, FastAPI, websockets.
+  * `pipeline_worker` – Python 3.12, FastAPI, websockets.
 
     * **Streaming STT** via Google Cloud Speech API (bidirectional gRPC).
     * **Translate** transcripts with Google Cloud Translate REST calls.

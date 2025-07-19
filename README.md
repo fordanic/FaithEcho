@@ -20,7 +20,7 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 
 ## Tech Stack
 
-* **Python 3.21** + **FastAPI** pipeline
+* **Python 3.12** + **FastAPI** pipeline
 * **ffmpeg** for ingest & LL‑HLS packaging
 * **Google Cloud Speech‑to‑Text**, **Translate**, **Text‑to‑Speech**
 * **Docker 24** / **docker‑compose**
