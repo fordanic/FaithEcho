@@ -79,7 +79,7 @@
 
 ## Milestone 5 — Shared Python SDK
 
-- [ ] Implement `faith_echo.config` using pydantic‑settings
+- [ ] Implement `faith_echo.config` using pydantic-settings
 - [ ] Define protobuf messages and pydantic DTO mirroring (`chunk_pb2`, `models.py`)
 - [ ] Implement async clients for STT, Translate, TTS microservices
 - [ ] Implement `gcp_client.py` with auth pooling and retries
