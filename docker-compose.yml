@@ -1,10 +1,11 @@
-version: "3.9"
 services:
   ingest_ffmpeg:
     build: ./edge/ingest_ffmpeg
     command: ["sleep", "infinity"]
   pipeline_worker:
-    build: ./edge/pipeline_worker
+    build:
+      context: .
+      dockerfile: edge/pipeline_worker/Dockerfile
     command: ["sleep", "infinity"]
     volumes:
       - ./src:/app/src
