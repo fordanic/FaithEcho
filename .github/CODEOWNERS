@@ -1,0 +1,11 @@
+# Backend pipeline
+/src/                 @fordanic
+
+# Docker & infra
+/docker-compose.yml   @fordanic
+
+# Listener web‑app (team example)
+/ui/                  @faith-echo/frontend-team
+
+# Catch‑all
+*                     @fordanic

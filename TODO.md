@@ -1,9 +1,9 @@
 # FaithEcho TODO
 
 ## Milestone 0 — Project kick‑off
-- [ ] Agree on branching model (main & develop, feature branches, squash merge)
-- [ ] Define Conventional Commits policy and PR template
-- [ ] Enable Dependabot, branch protection rules & CODEOWNERS
+- [x] Agree on branching model (main & develop, feature branches, squash merge)
+- [x] Define Conventional Commits policy and PR template
+- [x] Enable Dependabot, branch protection rules & CODEOWNERS
 
 ## Milestone 1 — Repository & project structure
 - [ ] Copy / verify skeleton directories (`/edge`, `/scripts`, `/ui`, etc.)
