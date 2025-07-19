@@ -110,7 +110,7 @@
 - [ ] `build‑push.yaml` – build images for main & tag, push to GHCR
 - [ ] `deploy‑edge.yaml` – gated release deployment to edge device
 - [ ] `pages‑docs.yaml` – MkDocs to GitHub Pages
-- [ ] Enable caching for poetry & Docker layers
+- [ ] Enable caching for `poetry` & Docker layers
 - [ ] Add `language‑services.yaml` for microservice builds
 
 ## Milestone 9 — Testing strategy
