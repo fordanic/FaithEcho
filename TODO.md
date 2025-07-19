@@ -27,7 +27,7 @@
 
 **Goal:** Provide three independent, containerised micro‑services – **STT**, **Translate**, **TTS** – that expose streaming APIs so they can be composed into the real‑time pipeline or run stand‑alone for testing.
 
-- [ ] Define gRPC / protobuf schema (`AudioChunk`, `TextChunk`, `SpeechChunk`, `LangRequest`, `LangResponse`)
+- [x] Define gRPC / protobuf schema (`AudioChunk`, `TextChunk`, `SpeechChunk`, `LangRequest`, `LangResponse`)
 - [ ] Scaffold three FastAPI/gRPC services under `/services/{stt,translate,tts}`
 - [ ] **STTService**
 
