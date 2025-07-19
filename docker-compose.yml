@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  ingest_ffmpeg:
+    build: ./edge/ingest_ffmpeg
+    command: ["sleep", "infinity"]
+  pipeline_worker:
+    build: ./edge/pipeline_worker
+    command: ["sleep", "infinity"]
+    volumes:
+      - ./src:/app/src
+  hls_packager:
+    build: ./edge/hls_packager
+    command: ["sleep", "infinity"]
+  ui_server:
+    build: ./ui
+    command: ["sleep", "infinity"]
