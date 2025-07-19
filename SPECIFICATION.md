@@ -104,7 +104,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
     * **TTS** synthesis requests to Google Cloud Text‑to‑Speech REST (returns base64 AAC).
     * Re‑packs TTS frames into per‑language FIFO pipes.
   * `hls_packager` – ffmpeg packaging the two AAC FIFO inputs into LL‑HLS (1 s segments).
-  * `ui_server` – Streamlit app serving the listener interface and `/hls` playlists.
+  * `ui_server` – Streamlit app serving the listener interface, `/hls` playlists, and segments.
   * `admin_api` – Part of `pipeline_worker`; exposes `/admin` with basic auth.
 * **Resources:** 4 vCPU / 8 GB RAM minimum.
 
