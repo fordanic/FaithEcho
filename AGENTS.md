@@ -8,7 +8,7 @@ If a system/developer chat instruction ever conflicts with this file, assume the
 
 ## Project Context
 
-FaithEcho is a real‑time Swedish→English/French translation service for church sermons (see `README.md` and `SPECIFICATION.md`). The stack is a **Python 3.12 / FastAPI** audio‑processing pipeline packaged in Docker, plus a **TypeScript + Vite** mobile web‑app, orchestrated with **docker‑compose**. Mission‑critical goals are ≤ 3 s end‑to‑end latency, strong privacy (no recordings), and ease of on‑prem deployment.
+FaithEcho is a real‑time Swedish→English/French translation service for church sermons (see `README.md` and `SPECIFICATION.md`). The stack is a **Python 3.12 / FastAPI** audio‑processing pipeline packaged in Docker, plus a **Streamlit** mobile web‑app, orchestrated with **docker‑compose**. Mission‑critical goals are ≤ 3 s end‑to‑end latency, strong privacy (no recordings), and ease of on‑prem deployment.
 
 ### Key Architectural Directories
 
@@ -17,7 +17,7 @@ FaithEcho is a real‑time Swedish→English/French translation service for chur
 | `/edge/ingest_ffmpeg/`   | RTMP → PCM converter container             |
 | `/edge/pipeline_worker/` | STT → MT → TTS Python pipeline & Admin API |
 | `/edge/hls_packager/`    | Low‑Latency HLS segmenter                  |
-| `/ui/`                   | Listener SPA (TypeScript)                  |
+| `/ui/`                   | Listener UI (Streamlit)                    |
 | `/scripts/`              | Dev & CI helper scripts                    |
 | `/src/`                  | Shared Python library (`faith_echo`)       |
 | `/docs/`                 | Diagrams, ADRs, runbooks                   |
@@ -49,12 +49,6 @@ Agents must *never* push images or attempt remote cloud actions; all builds run 
 * **Docstrings**  Use Google style.
 * **Concurrency**  Prefer `asyncio`, avoid blocking I/O in pipeline code.
 
-### TypeScript / Frontend
-
-* Format with `prettier --write .` and lint via `eslint .`.
-* Use functional components and hooks; avoid external state managers (Redux, Zustand) unless required.
-* Any DOM‑manipulating code must remain under `ui/` — never inside pipeline containers.
-
 ### Docker
 
 * Multi‑stage builds, final stage must run as non‑root user `1000:1000`.
@@ -66,7 +60,7 @@ Agents must *never* push images or attempt remote cloud actions; all builds run 
 
 ```
 # Full quality gate
-pre-commit run --all-files    # hooks: ruff, prettier, eslint
+pre-commit run --all-files    # hooks: ruff
 pytest -q                     # Python unit tests
 mypy src/ tests/              # Static typing
 ruff format --check           # Formatting & import order are correct
@@ -93,10 +87,10 @@ PRs that fail CI or exceed LOC limits without prior discussion will be marked **
 
 ## Testing Philosophy
 
-* **Unit tests** live next to source (`*_test.py` / `*.spec.ts`).
+* **Unit tests** live next to source (`*_test.py`).
 * **Contract tests** for GCP APIs use local stubs in `tests/gcp_stubs/` – *never* hit real endpoints in CI.
 * **Latency tests** in `tests/perf/` assert that the pipeline stays under 3 s P95.
-* Minimum coverage gate: **90 %** (Python) & **85 %** (TypeScript). Failing to meet the threshold blocks merge.
+* Minimum coverage gate: **90 %** (Python). Failing to meet the threshold blocks merge.
 
 ---
 
