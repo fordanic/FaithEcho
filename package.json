@@ -1,5 +1,5 @@
 {
-  "name": "FaithEcho",
+  "name": "faith-echo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.5.2",
   "devDependencies": {
-    "eslint": "^9.31.0",
-    "prettier": "^3.6.2"
+    "eslint": "^9.5.0",
+    "prettier": "^3.3.2"
   }
 }
