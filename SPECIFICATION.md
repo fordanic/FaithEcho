@@ -38,10 +38,12 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 * Provide live captions, language selector, text‑size control, volume/mute, latency indicator, and reconnect/report button.
 * Mobile‑first responsive design that works on the latest Chrome, Safari, and Edge browsers.
 * Display a warning if latency exceeds 3 seconds.
+* Implemented using **Streamlit** served by FastAPI.
 
 ### Admin Interface
 
 * Password‑protected admin page (`/admin`) secured by a single shared password.
+* Implemented using **Streamlit** served by FastAPI.
 * Switch operating mode: **Always‑On**, **Manual**, or **Scheduled**.
 * Manual **Start** and **Stop** controls.
 * Live dashboard showing input‑level meter, end‑to‑end latency, and client counts per language.
@@ -102,7 +104,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
     * **TTS** synthesis requests to Google Cloud Text‑to‑Speech REST (returns base64 AAC).
     * Re‑packs TTS frames into per‑language FIFO pipes.
   * `hls_packager` – ffmpeg packaging the two AAC FIFO inputs into LL‑HLS (1 s segments).
-  * `ui_server` – Nginx serving `/hls` playlists, segments, and the SPA UI.
+  * `ui_server` – Streamlit app serving the listener interface and `/hls` playlists.
   * `admin_api` – Part of `pipeline_worker`; exposes `/admin` with basic auth.
 * **Resources:** 4 vCPU / 8 GB RAM minimum.
 
