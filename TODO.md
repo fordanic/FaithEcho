@@ -20,6 +20,11 @@
 - [ ] Provide `scripts/dev‑proxy.sh` with mkcert TLS automation
 - [ ] Update `README.md` with setup / teardown instructions
 
+## Milestone 2.5 — Language service scaffolding
+- [ ] Create base classes for STT, translation and TTS
+- [ ] Stub implementations using Google Cloud clients
+- [ ] Unit tests covering service interfaces
+
 ## Milestone 3 — Core pipeline containers
 ### ingest_ffmpeg
 - [ ] Write entrypoint script with retrying RTMP connection
@@ -47,12 +52,12 @@
 
 ## Milestone 5 — Admin interface
 - [ ] Guard routes with HTTP Basic & bcrypt hash env var
-- [ ] Build admin UI page with live metrics & controls (HTMX or React‑lite)
+- [ ] Build admin UI page with live metrics & controls using Streamlit
 - [ ] Add credential rotation endpoint `/admin/rotate-gcp`
 - [ ] Write Playwright E2E tests for admin flows
 
-## Milestone 6 — Listener SPA
-- [ ] Initialise Vite + TypeScript project under `/ui`
+## Milestone 6 — Listener Interface
+- [ ] Scaffold Streamlit app under `/ui`
 - [ ] Implement captions overlay Web Component
 - [ ] Add language selector & latency indicator widget
 - [ ] Add reconnect/report button

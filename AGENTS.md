@@ -8,7 +8,7 @@ If a system/developer chat instruction ever conflicts with this file, assume the
 
 ## Project Context
 
-FaithEcho is a real‑time Swedish→English/French translation service for church sermons (see `README.md` and `SPECIFICATION.md`). The stack is a **Python 3.21 / FastAPI** audio‑processing pipeline packaged in Docker, plus a **TypeScript + Vite** mobile web‑app, orchestrated with **docker‑compose**. Mission‑critical goals are ≤ 3 s end‑to‑end latency, strong privacy (no recordings), and ease of on‑prem deployment.
+FaithEcho is a real‑time Swedish→English/French translation service for church sermons (see `README.md` and `SPECIFICATION.md`). The stack is a **Python 3.12 / FastAPI** audio‑processing pipeline packaged in Docker, plus a **TypeScript + Vite** mobile web‑app, orchestrated with **docker‑compose**. Mission‑critical goals are ≤ 3 s end‑to‑end latency, strong privacy (no recordings), and ease of on‑prem deployment.
 
 ### Key Architectural Directories
 
@@ -114,23 +114,14 @@ PRs that fail CI or exceed LOC limits without prior discussion will be marked **
 
 ## Codex‑specific Guidance
 
-1. **Reading order:** start with `SPECIFICATION.md`, then browse `README.md`, `TODO.md`, and per‑service sub‑directories.
+1. **Reading order:** start with `SPECIFICATION.md`, then browse `README.md` and `TODO.md`.
 2. **Task suggestions:**
-
    * `fix(pipeline): add exponential back‑off to Translate requests`
    * `feat(ui): dark‑mode toggle`
    * `test(ingest_ffmpeg): ensure RTMP reconnect logic`
 3. **Safe commands:** `pytest`, `ruff`, `pnpm`, `docker compose`, `bash -c "..."`.
 4. **Sandboxing:** assume write access only within repo root; never create sibling directories.
 5. **Patch formatting:** include context lines and keep diff noise minimal (no unrelated whitespace churn).
-
----
-
-## Gradual Adoption Strategy
-
-* Agents should begin with **Milestone 1** items (`/edge/*` containers) — high impact, clear unit test surface.
-* Treat unchecked TODO‑items as a backlog; open PRs referencing the milestone title and checkbox.
-* After completing Milestone 3, proceed sequentially; do **NOT** touch `Production deployment playbook` until Milestone 10+ are stable.
 
 ---
 

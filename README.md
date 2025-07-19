@@ -25,7 +25,8 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 * **Google Cloud Speech‑to‑Text**, **Translate**, **Text‑to‑Speech**
 * **Docker 24** / **docker‑compose**
 * **Nginx** static server & reverse proxy
-* SPA frontend written in vanilla TypeScript + Vite
+* Listener interface built with **Streamlit**
+* Admin interface built with **Streamlit**
 
 ## Repository Layout
 
@@ -37,7 +38,7 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 /edge/hls_packager/     – AAC → LL‑HLS packager
 /scripts/               – utility scripts (deployment, cleanup, etc.)
 /src/                   – shared source code
-/ui/                    – listener web‑app (dist served by Nginx)
+/ui/                    – listener web‑app (Streamlit)
 ```
 
 ## Quick Start (Development)
@@ -96,6 +97,7 @@ See `.env.example` for the full list.
 
 ## Admin Interface
 
+The admin dashboard is implemented using **Streamlit** and served through FastAPI.
 Navigate to **/admin** (HTTP basic auth) to:
 
 * Start/stop the pipeline or switch **Always‑On / Manual / Scheduled** mode.
