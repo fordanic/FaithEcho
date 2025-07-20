@@ -8,8 +8,10 @@ packages = [{ include = "faith_echo", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-protobuf = "^5.26.1"
-grpcio = "^1.64.1"
+protobuf = "==5.26.1"
+grpcio = "==1.64.1"
+fastapi = "==0.111.0"
+uvicorn = "==0.29.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.12.4"
@@ -17,7 +19,7 @@ pytest = "^8.4.1"
 mypy = "^1.17.0"
 pydantic = "^2.11.7"
 pip-audit = "^2.9.0"
-grpcio-tools = "^1.64.1"
+grpcio-tools = "==1.64.1"
 types-protobuf = "^5.26.0"
 pre-commit = "^3.7.0"
 
