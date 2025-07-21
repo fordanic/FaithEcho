@@ -1,4 +1,4 @@
-.PHONY: lint test precommit build
+.PHONY: lint test precommit build proto
 
 lint:
 	ruff format --check
@@ -19,3 +19,9 @@ poetry-install:
 
 build:
 	docker compose build
+
+proto:
+	python -m grpc_tools.protoc \
+		-I src/faith_echo/proto \
+		--python_out=src/faith_echo/proto \
+		src/faith_echo/proto/language_service.proto

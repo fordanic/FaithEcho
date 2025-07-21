@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package faithecho.v1;
+
+// Raw 16 kHz mono audio chunk.
+message AudioChunk {
+  bytes pcm16k = 1;
+  int64 timestamp_ms = 2;
+}
+
+// Transcript chunk returned from STT or translation service.
+message TextChunk {
+  string text = 1;
+  bool is_final = 2;
+  int64 timestamp_ms = 3;
+}
+
+// Encoded speech chunk (AAC).
+message SpeechChunk {
+  bytes aac = 1;
+  int64 timestamp_ms = 2;
+}
+
+// Request to select languages.
+message LangRequest {
+  string source_lang = 1; // e.g. 'sv'
+  repeated string target_langs = 2; // e.g. ['en', 'fr']
+}
+
+// Response confirming accepted languages.
+message LangResponse {
+  repeated string accepted_langs = 1;
+}
