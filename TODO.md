@@ -45,8 +45,8 @@
   * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (MP3 64 kb s⁻¹)
 - [x] Provide health, metrics and readiness endpoints for each service
 - [x] Provide individual Dockerfiles and docker‑compose override for running the trio locally
- - [x] Add typed async Python clients in `faith_echo.sdk`
-- [ ] Unit tests (pytest + pytest‑asyncio) and contract tests (Pact) for service interfaces (≥ 90 % coverage)
+- [x] Add typed async Python clients in `faith_echo.sdk`
+- [x] Unit tests (pytest + pytest‑asyncio) and contract tests (Pact) for service interfaces (≥ 90 % coverage)
 - [ ] CI job `language‑services.yaml` building & testing images
 
 ## Milestone 4 — Core pipeline containers

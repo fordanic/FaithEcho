@@ -69,7 +69,7 @@ async def translate_stream(
             target_language_code=lang,
             mime_type="text/plain",
             glossary_config=GLOSSARY_CONFIG,
-        )
+        )  # type: ignore[call-arg]
         return response.translations[0].translated_text
 
     async for chunk in chunks:
@@ -149,7 +149,7 @@ async def stream(websocket: WebSocket) -> None:
         await websocket.close()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover - manual run helper
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
