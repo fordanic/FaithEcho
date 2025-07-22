@@ -60,17 +60,16 @@ async def synthesize_stream(
     )
     loop = asyncio.get_running_loop()
 
+    def do_request(text: str) -> bytes:
+        response = client.synthesize_speech(
+            input=tts.SynthesisInput(text=text),
+            voice=voice,
+            audio_config=audio_config,
+        )
+        return response.audio_content
+
     async for chunk in chunks:
-
-        def do_request() -> bytes:
-            response = client.synthesize_speech(
-                input=tts.SynthesisInput(text=chunk.text),
-                voice=voice,
-                audio_config=audio_config,
-            )
-            return response.audio_content
-
-        audio = await loop.run_in_executor(None, do_request)
+        audio = await loop.run_in_executor(None, do_request, chunk.text)
         yield SpeechChunk(
             audio_b64=base64.b64encode(audio).decode(),
             is_final=chunk.is_final,
