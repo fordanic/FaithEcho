@@ -26,6 +26,9 @@ def compile_proto(tmp_path: Path):
     (tmp_path / "faith_echo" / "proto").mkdir(exist_ok=True)
     (tmp_path / "faith_echo" / "proto" / "__init__.py").touch()
     sys.path.insert(0, str(tmp_path))
+    pkg = importlib.import_module("faith_echo")
+    pkg.__path__.insert(0, str(tmp_path / "faith_echo"))
+    importlib.invalidate_caches()
     return importlib.import_module("faith_echo.proto.language_service_pb2")
 
 
