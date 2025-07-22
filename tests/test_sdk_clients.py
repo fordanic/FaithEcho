@@ -74,7 +74,7 @@ async def test_stt_client(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "faith_echo.sdk.stt_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.stt_client.websockets.connect", make_connect(client)
     )
 
     stt = STTClient("ws://testserver")
@@ -107,7 +107,7 @@ async def test_translate_client(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "faith_echo.sdk.translate_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.translate_client.websockets.connect", make_connect(client)
     )
 
     tc = TranslateClient("ws://testserver")
@@ -136,7 +136,7 @@ async def test_tts_client(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "faith_echo.sdk.tts_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.tts_client.websockets.connect", make_connect(client)
     )
 
     tts = TTSClient("ws://testserver")
