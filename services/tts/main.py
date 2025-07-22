@@ -100,10 +100,11 @@ async def stream(websocket: WebSocket) -> None:
             while True:
                 data = await websocket.receive_json()
                 if data.get("stop"):
-                    await chunk_q.put(None)
                     break
-                chunk_q.put_nowait(TextChunk(**data))
+                await chunk_q.put(TextChunk(**data))
         except WebSocketDisconnect:
+            pass
+        finally:
             await chunk_q.put(None)
 
     async def chunk_iter() -> AsyncIterator[TextChunk]:
