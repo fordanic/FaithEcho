@@ -69,7 +69,7 @@ async def translate_stream(
             target_language_code=lang,
             mime_type="text/plain",
             glossary_config=GLOSSARY_CONFIG,
-        )
+        )  # type: ignore[call-arg]
         return response.translations[0].translated_text
 
     async for chunk in chunks:

@@ -1,10 +1,19 @@
 from pact import Consumer, Provider  # type: ignore
+import pytest
 import requests  # type: ignore
 
 
-def test_health_contract(tmp_path):
+@pytest.mark.parametrize(
+    "service_name",
+    [
+        "stt-service",
+        "translate-service",
+        "tts-service",
+    ],
+)
+def test_health_contract(tmp_path, service_name: str) -> None:
     pact = Consumer("health-client").has_pact_with(
-        Provider("stt-service"), pact_dir=str(tmp_path), port=12345
+        Provider(service_name), pact_dir=str(tmp_path), port=12345
     )
     pact.start_service()
     pact.given("service running").upon_receiving("health check").with_request(
@@ -17,4 +26,4 @@ def test_health_contract(tmp_path):
         assert resp.json() == {"status": "ok"}
 
     pact.stop_service()
-    assert (tmp_path / "health-client-stt-service.json").exists()
+    assert (tmp_path / f"health-client-{service_name}.json").exists()
