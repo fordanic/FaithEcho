@@ -42,7 +42,7 @@
  - [x] **TTSService**
 
   * Accept `TextChunk` stream plus voice parameters
-  * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (AAC 64 kb s⁻¹)
+  * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (MP3 64 kb s⁻¹)
 - [ ] Provide health, metrics and readiness endpoints for each service
 - [ ] Provide individual Dockerfiles and docker‑compose override for running the trio locally
 - [ ] Add typed async Python clients in `faith_echo.sdk`

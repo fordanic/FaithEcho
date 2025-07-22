@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import os
 from typing import AsyncIterator
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -9,6 +10,14 @@ from google.cloud import texttospeech_v1 as tts
 from pydantic import BaseModel
 
 app = FastAPI(title="FaithEcho TTS Service")
+
+# Initialise Google TTS client once at startup
+if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+    TTS_CLIENT = tts.TextToSpeechClient()
+else:
+    from google.auth.credentials import AnonymousCredentials
+
+    TTS_CLIENT = tts.TextToSpeechClient(credentials=AnonymousCredentials())
 
 
 class TextChunk(BaseModel):
@@ -40,7 +49,7 @@ async def synthesize_stream(
 ) -> AsyncIterator[SpeechChunk]:
     """Send chunks to Google TTS and yield encoded audio."""
 
-    client = tts.TextToSpeechClient()
+    client = TTS_CLIENT
     voice = tts.VoiceSelectionParams(
         language_code=params.lang,
         name=params.voice,
