@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir poetry && \
     pip install --no-cache-dir -r requirements.txt
 
 FROM base AS test
-CMD ["python", "-m", "pip", "check"]
+RUN ["python", "-m", "pip", "check"]
 
 FROM base AS runtime
 COPY services/tts /app/services/tts
