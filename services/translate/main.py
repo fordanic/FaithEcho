@@ -4,12 +4,35 @@ import asyncio
 import os
 from typing import AsyncIterator, List
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, Response, WebSocket, WebSocketDisconnect
 from google.cloud import translate_v3 as translate
 from google.cloud.translate_v3.types import TranslateTextGlossaryConfig
 from pydantic import BaseModel
 
+from prometheus_client import (
+    CollectorRegistry,
+    CONTENT_TYPE_LATEST,
+    Counter,
+    generate_latest,
+)
+
 app = FastAPI(title="FaithEcho TRANSLATE Service")
+
+REGISTRY = CollectorRegistry()
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests",
+    ["method", "endpoint"],
+    registry=REGISTRY,
+)
+
+
+@app.middleware("http")
+async def _count_requests(request: Request, call_next):
+    response = await call_next(request)
+    REQUEST_COUNT.labels(request.method, request.url.path).inc()
+    return response
+
 
 # Initialise Google Translate client and configuration once at startup.
 if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
@@ -86,6 +109,19 @@ async def translate_stream(
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/ready")
+async def ready() -> dict[str, str]:
+    """Readiness probe."""
+    return {"status": "ready"}
+
+
+@app.get("/metrics")
+async def metrics() -> Response:
+    """Expose Prometheus metrics."""
+    data = generate_latest(REGISTRY)
+    return Response(content=data, media_type=CONTENT_TYPE_LATEST)
 
 
 @app.websocket("/stream")
