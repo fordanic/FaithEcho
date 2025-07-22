@@ -5,32 +5,15 @@ import base64
 import os
 from typing import AsyncIterator
 
-from fastapi import FastAPI, Request, Response, WebSocket, WebSocketDisconnect
-from prometheus_client import (
-    CollectorRegistry,
-    CONTENT_TYPE_LATEST,
-    Counter,
-    generate_latest,
-)
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from services.utils import add_monitoring
 from google.cloud import texttospeech_v1 as tts
 from pydantic import BaseModel
 
 app = FastAPI(title="FaithEcho TTS Service")
 
-REGISTRY = CollectorRegistry()
-REQUEST_COUNT = Counter(
-    "http_requests_total",
-    "Total HTTP requests",
-    ["method", "endpoint"],
-    registry=REGISTRY,
-)
-
-
-@app.middleware("http")
-async def _count_requests(request: Request, call_next):
-    response = await call_next(request)
-    REQUEST_COUNT.labels(request.method, request.url.path).inc()
-    return response
+# attach Prometheus metrics middleware and endpoint
+add_monitoring(app)
 
 
 # Initialise Google TTS client once at startup
@@ -108,13 +91,6 @@ async def health() -> dict[str, str]:
 async def ready() -> dict[str, str]:
     """Readiness probe."""
     return {"status": "ready"}
-
-
-@app.get("/metrics")
-async def metrics() -> Response:
-    """Expose Prometheus metrics."""
-    data = generate_latest(REGISTRY)
-    return Response(content=data, media_type=CONTENT_TYPE_LATEST)
 
 
 @app.websocket("/stream")

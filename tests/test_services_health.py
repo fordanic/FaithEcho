@@ -6,29 +6,27 @@ from starlette.testclient import TestClient  # type: ignore[import-not-found]
 import pytest
 
 
-@pytest.mark.parametrize("service", ["stt", "translate", "tts"])
-def test_service_health(service: str) -> None:
-    module = importlib.import_module(f"services.{service}.main")
+@pytest.fixture(params=["stt", "translate", "tts"])
+def client(request: pytest.FixtureRequest) -> TestClient:
+    """Return a TestClient for the requested service."""
+    module = importlib.import_module(f"services.{request.param}.main")
     app = getattr(module, "app")
-    client = TestClient(app)
+    return TestClient(app)
+
+
+def test_service_health(client: TestClient) -> None:
     resp = client.get("/health")
     assert resp.status_code == 200
     assert resp.json() == {"status": "ok"}
 
 
-@pytest.mark.parametrize("service", ["stt", "translate", "tts"])
-def test_service_ready(service: str) -> None:
-    module = importlib.import_module(f"services.{service}.main")
-    client = TestClient(getattr(module, "app"))
+def test_service_ready(client: TestClient) -> None:
     resp = client.get("/ready")
     assert resp.status_code == 200
     assert resp.json() == {"status": "ready"}
 
 
-@pytest.mark.parametrize("service", ["stt", "translate", "tts"])
-def test_service_metrics(service: str) -> None:
-    module = importlib.import_module(f"services.{service}.main")
-    client = TestClient(getattr(module, "app"))
+def test_service_metrics(client: TestClient) -> None:
     resp = client.get("/metrics")
     assert resp.status_code == 200
     assert b"http_requests_total" in resp.content
