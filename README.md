@@ -50,6 +50,12 @@ endpoints:
 * `/ready` – readiness check used by docker-compose
 * `/metrics` – Prometheus metrics in text format
 
+To run these services stand‑alone for testing, use the override compose file:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.override.yml up stt translate tts
+```
+
 ## Quick Start (Development)
 
 > Tested on **Ubuntu 24.04** with Docker 24.x.
