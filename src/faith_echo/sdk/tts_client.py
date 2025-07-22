@@ -23,7 +23,9 @@ class TTSClient:
         uri = f"{self.base_url}/stream"
         async with websockets.connect(uri) as ws:
             await ws.send(params.model_dump_json())
-            await ws.recv()  # acknowledgement
+            ack_raw = await ws.recv()
+            if not json.loads(ack_raw).get("accepted"):
+                raise RuntimeError("TTS server did not accept voice parameters")
 
             async def sender() -> None:
                 async for chunk in chunks:
