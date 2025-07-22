@@ -47,7 +47,7 @@
 - [x] Provide individual Dockerfiles and docker‑compose override for running the trio locally
 - [x] Add typed async Python clients in `faith_echo.sdk`
 - [x] Unit tests (pytest + pytest‑asyncio) and contract tests (Pact) for service interfaces (≥ 90 % coverage)
-- [ ] CI job `language‑services.yaml` building & testing images
+- [x] CI job `language‑services.yaml` building & testing images
 
 ## Milestone 4 — Core pipeline containers
 

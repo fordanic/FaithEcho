@@ -99,7 +99,7 @@ The edge server runs headless in the church LAN:
 ssh church-edge 'docker compose pull && docker compose up -d'
 ```
 
-We recommend provisioning the Google Cloud project via Terraform and wiring the CI/CD workflow in `.github/workflows/` to push new images automatically.
+We recommend provisioning the Google Cloud project via Terraform and wiring the CI/CD workflow in `.github/workflows/` to push new images automatically. A dedicated workflow `language-services.yaml` builds and smoke-tests the STT, Translate and TTS containers on each push.
 
 ## Configuration Reference
 

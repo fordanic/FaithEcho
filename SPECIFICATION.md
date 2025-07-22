@@ -141,7 +141,7 @@ FaithEcho is a real‑time translation service that allows church attendees who 
 
 | Task                            | Tool / Process                                          |
 | ------------------------------- | ------------------------------------------------------- |
-| Build & push images             | GitHub Actions                                          |
+| Build & push images             | GitHub Actions (`language-services.yaml`) |
 | Deploy to edge server           | `docker compose pull && docker compose up -d` via SSH   |
 | Provision Google project & APIs | Terraform or `gcloud` CLI scripts                       |
 | Monitoring                      | Prometheus node exporter + Google Cloud Monitoring      |

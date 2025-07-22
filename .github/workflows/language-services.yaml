@@ -1,0 +1,50 @@
+name: Language Services CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+    paths:
+      - "services/**"
+      - "docker-compose.override.yml"
+      - ".github/workflows/language-services.yaml"
+  pull_request:
+    paths:
+      - "services/**"
+      - "docker-compose.override.yml"
+      - ".github/workflows/language-services.yaml"
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build images
+        run: docker compose -f docker-compose.override.yml build stt translate tts
+
+      - name: Start services
+        run: docker compose -f docker-compose.override.yml up -d stt translate tts
+
+      - name: Wait for health endpoints
+        run: |
+          for port in 8101 8102 8103; do
+            for i in {1..10}; do
+              if curl -fs http://localhost:$port/health >/dev/null; then
+                break
+              fi
+              sleep 1
+            done
+          done
+
+      - name: Smoke test
+        run: |
+          curl -f http://localhost:8101/health
+          curl -f http://localhost:8102/health
+          curl -f http://localhost:8103/health
+
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.override.yml down -v
