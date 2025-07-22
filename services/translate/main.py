@@ -11,6 +11,19 @@ from pydantic import BaseModel
 
 app = FastAPI(title="FaithEcho TRANSLATE Service")
 
+# Initialise Google Translate client and configuration once at startup.
+if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+    TRANSLATE_CLIENT = translate.TranslationServiceClient()
+else:
+    from google.auth.credentials import AnonymousCredentials
+
+    TRANSLATE_CLIENT = translate.TranslationServiceClient(
+        credentials=AnonymousCredentials()
+    )
+PARENT = f"projects/{os.getenv('GOOGLE_CLOUD_PROJECT', 'test')}/locations/{os.getenv('TRANSLATE_LOCATION', 'global')}"
+_glossary = os.getenv("TRANSLATE_GLOSSARY")
+GLOSSARY_CONFIG = TranslateTextGlossaryConfig(glossary=_glossary) if _glossary else None
+
 
 class TextChunk(BaseModel):
     """Transcript chunk used by the translation service."""
@@ -40,29 +53,22 @@ async def translate_stream(
 ) -> AsyncIterator[TranslatedChunk]:
     """Translate text chunks using Google Cloud Translate."""
 
-    client = translate.TranslationServiceClient()
-    parent = f"projects/{os.getenv('GOOGLE_CLOUD_PROJECT', 'test')}/locations/{os.getenv('TRANSLATE_LOCATION', 'global')}"
-    glossary = os.getenv("TRANSLATE_GLOSSARY")
-    glossary_config = (
-        TranslateTextGlossaryConfig(glossary=glossary) if glossary else None
-    )
-
     loop = asyncio.get_running_loop()
+
+    def do_request(text: str, lang: str) -> str:
+        response = TRANSLATE_CLIENT.translate_text(
+            parent=PARENT,
+            contents=[text],
+            source_language_code=source_lang,
+            target_language_code=lang,
+            mime_type="text/plain",
+            glossary_config=GLOSSARY_CONFIG,
+        )
+        return response.translations[0].translated_text
+
     async for chunk in chunks:
         for lang in target_langs:
-
-            def do_request() -> str:
-                response = client.translate_text(
-                    parent=parent,
-                    contents=[chunk.text],
-                    source_language_code=source_lang,
-                    target_language_code=lang,
-                    mime_type="text/plain",
-                    glossary_config=glossary_config,
-                )
-                return response.translations[0].translated_text
-
-            translated = await loop.run_in_executor(None, do_request)
+            translated = await loop.run_in_executor(None, do_request, chunk.text, lang)
             yield TranslatedChunk(
                 text=translated,
                 is_final=chunk.is_final,
@@ -95,11 +101,14 @@ async def stream(websocket: WebSocket) -> None:
             while True:
                 data = await websocket.receive_json()
                 if data.get("stop"):
-                    await chunk_q.put(None)
                     break
                 chunk = TextChunk(**data)
                 await chunk_q.put(chunk)
         except WebSocketDisconnect:
+            pass
+        except Exception:
+            pass
+        finally:
             await chunk_q.put(None)
 
     async def chunk_iter() -> AsyncIterator[TextChunk]:

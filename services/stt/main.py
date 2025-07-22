@@ -49,17 +49,19 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
             yield StreamingRecognizeRequest(audio_content=data)
 
     def run_recognize() -> None:
-        client = speech.SpeechClient()
-        for resp in client.streaming_recognize(request_gen()):
-            for result in resp.results:
-                out_q.put(
-                    TextChunk(
-                        text=result.alternatives[0].transcript,
-                        is_final=result.is_final,
-                        timestamp_ms=int(time.time() * 1000),
+        try:
+            client = speech.SpeechClient()
+            for resp in client.streaming_recognize(request_gen()):
+                for result in resp.results:
+                    out_q.put(
+                        TextChunk(
+                            text=result.alternatives[0].transcript,
+                            is_final=result.is_final,
+                            timestamp_ms=int(time.time() * 1000),
+                        )
                     )
-                )
-        out_q.put(None)
+        finally:
+            out_q.put(None)
 
     thread = threading.Thread(target=run_recognize, daemon=True)
     thread.start()
