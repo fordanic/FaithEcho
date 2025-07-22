@@ -6,7 +6,7 @@ from typing import AsyncIterator, List
 
 import websockets
 
-from .models import LangRequest, TextChunk, TranslatedChunk
+from .models import LangRequest, LangResponse, TextChunk, TranslatedChunk
 
 
 class TranslateClient:
