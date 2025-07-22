@@ -1,0 +1,29 @@
+import importlib
+from typing import AsyncIterator, List
+
+from starlette.testclient import TestClient  # type: ignore[import-not-found]
+
+
+def test_stt_service_integration(monkeypatch) -> None:
+    module = importlib.import_module("services.stt.main")
+
+    received: List[bytes] = []
+
+    async def fake_transcribe(chunks: AsyncIterator[bytes]):
+        async for chunk in chunks:
+            received.append(chunk)
+        yield module.TextChunk(text="chunk1", is_final=False, timestamp_ms=1)
+        yield module.TextChunk(text="chunk2", is_final=True, timestamp_ms=2)
+
+    monkeypatch.setattr(module, "transcribe_stream", fake_transcribe)
+
+    client = TestClient(module.app)
+    test_audio = b"testaudio" * 10
+    with client.websocket_connect("/stream") as ws:
+        for i in range(0, len(test_audio), 4):
+            ws.send_bytes(test_audio[i : i + 4])
+        ws.send_text("stop")
+        assert ws.receive_json()["text"] == "chunk1"
+        assert ws.receive_json()["text"] == "chunk2"
+
+    assert b"".join(received) == test_audio

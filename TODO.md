@@ -29,15 +29,15 @@
 
 - [x] Define gRPC / protobuf schema (`AudioChunk`, `TextChunk`, `SpeechChunk`, `LangRequest`, `LangResponse`)
 - [x] Scaffold three FastAPI/gRPC services under `/services/{stt,translate,tts}`
-- [ ] **STTService**
+- [x] **STTService**
 
   * Accept 16 kHz mono PCM stream (WebSocket or gRPC bidi stream)
   * Forward to Google Cloud Speech‑to‑Text streaming API
   * Return partial & final `TextChunk` messages with timestamps
-- [ ] **TranslationService**
+- [x] **TranslationService**
 
   * Accept `TextChunk` stream and target language codes
-  * Call Google Cloud Translate; support custom glossary
+  * Call Google Cloud Translate REST API; support custom glossary
   * Stream back translated `TextChunk`
 - [ ] **TTSService**
 
