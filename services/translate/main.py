@@ -67,10 +67,16 @@ async def translate_stream(
         return response.translations[0].translated_text
 
     async for chunk in chunks:
-        for lang in target_langs:
-            translated = await loop.run_in_executor(None, do_request, chunk.text, lang)
+        # Run translation requests for all target languages concurrently
+        tasks = [
+            loop.run_in_executor(None, do_request, chunk.text, lang)
+            for lang in target_langs
+        ]
+        results = await asyncio.gather(*tasks)
+
+        for lang, translated_text in zip(target_langs, results):
             yield TranslatedChunk(
-                text=translated,
+                text=translated_text,
                 is_final=chunk.is_final,
                 timestamp_ms=chunk.timestamp_ms,
                 lang=lang,
