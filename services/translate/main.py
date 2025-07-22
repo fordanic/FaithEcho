@@ -114,6 +114,7 @@ async def stream(websocket: WebSocket) -> None:
             pass
         except Exception:
             import logging
+
             logging.exception("Error in websocket receiver")
         finally:
             await chunk_q.put(None)

@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import queue
 import threading
-import time
 from typing import AsyncIterator, Iterator
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -57,7 +56,9 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
                         TextChunk(
                             text=result.alternatives[0].transcript,
                             is_final=result.is_final,
-                            timestamp_ms=int(result.result_end_time.total_seconds() * 1000),
+                            timestamp_ms=int(
+                                result.result_end_time.total_seconds() * 1000
+                            ),
                         )
                     )
         finally:
