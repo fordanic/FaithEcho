@@ -41,6 +41,15 @@ For a full architecture diagram and timing breakdown see **SPECIFICATION.md**.
 /ui/                    – listener web‑app (Streamlit)
 ```
 
+## Language Microservices
+
+The STT, Translate and TTS services under `/services` expose three standard
+endpoints:
+
+* `/health` – liveness check
+* `/ready` – readiness check used by docker-compose
+* `/metrics` – Prometheus metrics in text format
+
 ## Quick Start (Development)
 
 > Tested on **Ubuntu 24.04** with Docker 24.x.

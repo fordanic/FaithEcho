@@ -6,10 +6,15 @@ import os
 from typing import AsyncIterator
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from services.utils import add_monitoring
 from google.cloud import texttospeech_v1 as tts
 from pydantic import BaseModel
 
 app = FastAPI(title="FaithEcho TTS Service")
+
+# attach Prometheus metrics middleware and endpoint
+add_monitoring(app)
+
 
 # Initialise Google TTS client once at startup
 if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
@@ -80,6 +85,12 @@ async def synthesize_stream(
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/ready")
+async def ready() -> dict[str, str]:
+    """Readiness probe."""
+    return {"status": "ready"}
 
 
 @app.websocket("/stream")
