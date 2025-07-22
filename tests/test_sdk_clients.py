@@ -31,7 +31,7 @@ class FakeWS:
     async def __anext__(self) -> str:
         try:
             msg = await asyncio.to_thread(self._session.receive_text)  # type: ignore[attr-defined]
-        except Exception as exc:  # connection closed
+        except WebSocketDisconnect as exc:  # connection closed
             raise StopAsyncIteration from exc
         return msg
 
