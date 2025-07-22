@@ -29,20 +29,20 @@
 
 - [x] Define gRPC / protobuf schema (`AudioChunk`, `TextChunk`, `SpeechChunk`, `LangRequest`, `LangResponse`)
 - [x] Scaffold three FastAPI/gRPC services under `/services/{stt,translate,tts}`
-- [ ] **STTService**
+- [x] **STTService**
 
   * Accept 16 kHz mono PCM stream (WebSocket or gRPC bidi stream)
   * Forward to Google Cloud Speech‑to‑Text streaming API
   * Return partial & final `TextChunk` messages with timestamps
-- [ ] **TranslationService**
+- [x] **TranslationService**
 
   * Accept `TextChunk` stream and target language codes
-  * Call Google Cloud Translate; support custom glossary
+  * Call Google Cloud Translate REST API; support custom glossary
   * Stream back translated `TextChunk`
-- [ ] **TTSService**
+ - [x] **TTSService**
 
   * Accept `TextChunk` stream plus voice parameters
-  * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (AAC 64 kb s⁻¹)
+  * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (MP3 64 kb s⁻¹)
 - [ ] Provide health, metrics and readiness endpoints for each service
 - [ ] Provide individual Dockerfiles and docker‑compose override for running the trio locally
 - [ ] Add typed async Python clients in `faith_echo.sdk`
