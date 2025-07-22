@@ -70,9 +70,10 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
         audio_q.put(None)
 
     feed_task = asyncio.create_task(feed())
+    loop = asyncio.get_running_loop()
     try:
         while True:
-            item = await asyncio.get_event_loop().run_in_executor(None, out_q.get)
+            item = await loop.run_in_executor(None, out_q.get)
             if item is None:
                 break
             yield item

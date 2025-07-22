@@ -47,7 +47,7 @@ async def translate_stream(
         TranslateTextGlossaryConfig(glossary=glossary) if glossary else None
     )
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     async for chunk in chunks:
         for lang in target_langs:
 

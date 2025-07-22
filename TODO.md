@@ -39,7 +39,7 @@
   * Accept `TextChunk` stream and target language codes
   * Call Google Cloud Translate REST API; support custom glossary
   * Stream back translated `TextChunk`
-- [ ] **TTSService**
+ - [x] **TTSService**
 
   * Accept `TextChunk` stream plus voice parameters
   * Call Google Cloud Text‑to‑Speech; stream back encoded `SpeechChunk` (AAC 64 kb s⁻¹)
