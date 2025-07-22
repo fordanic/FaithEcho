@@ -37,4 +37,8 @@ class TTSClient:
                 async for message in ws:
                     yield SpeechChunk.model_validate_json(message)
             finally:
-                await send_task
+                send_task.cancel()
+                try:
+                    await send_task
+                except asyncio.CancelledError:
+                    pass  # Task cancellation is expected
