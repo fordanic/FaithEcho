@@ -27,7 +27,9 @@ class TranslateClient:
         async with websockets.connect(uri) as ws:
             req = LangRequest(source_lang=source_lang, target_langs=target_langs)
             await ws.send(req.model_dump_json())
-            LangResponse.model_validate_json(await ws.recv())  # LangResponse acknowledgement
+            LangResponse.model_validate_json(
+                await ws.recv()
+            )  # LangResponse acknowledgement
 
             async def sender() -> None:
                 async for chunk in chunks:
