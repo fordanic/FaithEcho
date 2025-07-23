@@ -62,6 +62,7 @@ def fake_ws_connect():
             return _Ctx()
 
         return _connect
+
     return make_connect
 
 
@@ -115,7 +116,8 @@ async def test_translate_client(monkeypatch, fake_ws_connect) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "src.faith_echo.sdk.translate_client.websockets.connect", fake_ws_connect(client)
+        "src.faith_echo.sdk.translate_client.websockets.connect",
+        fake_ws_connect(client),
     )
 
     tc = TranslateClient("ws://testserver")
@@ -133,7 +135,9 @@ async def test_translate_client(monkeypatch, fake_ws_connect) -> None:
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_tts_client_streams_and_receives_speech(monkeypatch, fake_ws_connect) -> None:
+async def test_tts_client_streams_and_receives_speech(
+    monkeypatch, fake_ws_connect
+) -> None:
     # Arrange
     module = importlib.import_module("services.tts.main")
 

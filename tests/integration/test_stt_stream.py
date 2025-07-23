@@ -6,6 +6,7 @@ from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 import pytest
 
+
 @pytest.mark.integration
 def test_stt_service_streams_transcripts_correctly(monkeypatch) -> None:
     # Arrange

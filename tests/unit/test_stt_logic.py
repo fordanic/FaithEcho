@@ -7,7 +7,9 @@ from stt import main
 
 
 @pytest.mark.asyncio
-async def test_transcribe_stream_returns_correct_transcripts(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_transcribe_stream_returns_correct_transcripts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     # Arrange
     mock_result = MagicMock()
     mock_result.alternatives = [MagicMock(transcript="foo")]

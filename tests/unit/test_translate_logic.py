@@ -7,7 +7,9 @@ from translate import main
 
 
 @pytest.mark.asyncio
-async def test_translate_stream_returns_correct_translations(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_translate_stream_returns_correct_translations(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     # Arrange
     def fake_translate_text(**kwargs):
         return MagicMock(
