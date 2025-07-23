@@ -7,21 +7,30 @@
 
 ## How to Run Tests
 
-*   **Run all tests:**
+The recommended way to run tests is using the `Makefile` targets:
+
+*   **Run all tests (with coverage):**
     ```bash
-    poetry run pytest
+    make tests
     ```
-*   **Run only fast tests (unit, smoke):**
+*   **Run unit tests only:**
     ```bash
-    poetry run pytest -m "not (integration or e2e)"
+    make unit-tests
     ```
-*   **Run a specific suite (e.g., integration):**
+*   **Run integration tests only:**
     ```bash
-    poetry run pytest -m integration
+    make integration-tests
     ```
+
+You can also invoke `pytest` directly for more control:
+
 *   **Run tests in parallel:**
     ```bash
     poetry run pytest -n auto
+    ```
+*   **Run a specific suite by marker:**
+    ```bash
+    poetry run pytest -m integration
     ```
 
 ---
