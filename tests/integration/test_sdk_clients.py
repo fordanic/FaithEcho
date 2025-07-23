@@ -43,27 +43,31 @@ class FakeWS:
         await asyncio.to_thread(self._session.close)  # type: ignore[attr-defined]
 
 
-def make_connect(client: TestClient):
-    def _connect(url: str, *args, **kwargs):
-        path = url.split("testserver")[-1]
-        ctx = client.websocket_connect(path)
+@pytest.fixture
+def fake_ws_connect():
+    def make_connect(client: TestClient):
+        def _connect(url: str, *args, **kwargs):
+            path = url.split("testserver")[-1]
+            ctx = client.websocket_connect(path)
 
-        class _Ctx:
-            async def __aenter__(self_inner):
-                session = ctx.__enter__()
-                self_inner._session = session
-                return FakeWS(session)
+            class _Ctx:
+                async def __aenter__(self_inner):
+                    session = ctx.__enter__()
+                    self_inner._session = session
+                    return FakeWS(session)
 
-            async def __aexit__(self_inner, exc_type, exc, tb):
-                await asyncio.to_thread(ctx.__exit__, exc_type, exc, tb)
+                async def __aexit__(self_inner, exc_type, exc, tb):
+                    await asyncio.to_thread(ctx.__exit__, exc_type, exc, tb)
 
-        return _Ctx()
+            return _Ctx()
 
-    return _connect
+        return _connect
+    return make_connect
 
 
 @pytest.mark.asyncio
-async def test_stt_client(monkeypatch) -> None:
+async def test_stt_client(monkeypatch, fake_ws_connect) -> None:
+    # Arrange
     module = importlib.import_module("services.stt.main")
 
     async def fake_transcribe(_: AsyncIterator[bytes]):
@@ -74,7 +78,7 @@ async def test_stt_client(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "src.faith_echo.sdk.stt_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.stt_client.websockets.connect", fake_ws_connect(client)
     )
 
     stt = STTClient("ws://testserver")
@@ -83,12 +87,16 @@ async def test_stt_client(monkeypatch) -> None:
         yield b"1"
         yield b"2"
 
+    # Act
     results = [chunk async for chunk in stt.stream(audio())]
+
+    # Assert
     assert [r.text for r in results] == ["a", "b"]
 
 
 @pytest.mark.asyncio
-async def test_translate_client(monkeypatch) -> None:
+async def test_translate_client(monkeypatch, fake_ws_connect) -> None:
+    # Arrange
     module = importlib.import_module("services.translate.main")
 
     async def fake_translate(
@@ -107,7 +115,7 @@ async def test_translate_client(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "src.faith_echo.sdk.translate_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.translate_client.websockets.connect", fake_ws_connect(client)
     )
 
     tc = TranslateClient("ws://testserver")
@@ -116,13 +124,17 @@ async def test_translate_client(monkeypatch) -> None:
         yield TextChunk(text="hej", is_final=False, timestamp_ms=1)
         yield TextChunk(text="då", is_final=True, timestamp_ms=2)
 
+    # Act
     results = [r async for r in tc.stream(chunks(), "sv", ["en"])]
+
+    # Assert
     assert [r.text for r in results] == ["HEJ", "DÅ"]
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
-async def test_tts_client_streams_and_receives_speech(monkeypatch) -> None:
+async def test_tts_client_streams_and_receives_speech(monkeypatch, fake_ws_connect) -> None:
+    # Arrange
     module = importlib.import_module("services.tts.main")
 
     async def fake_tts(chunks: AsyncIterator[TextChunk], params: VoiceParams):
@@ -137,7 +149,7 @@ async def test_tts_client_streams_and_receives_speech(monkeypatch) -> None:
 
     client = TestClient(module.app)
     monkeypatch.setattr(
-        "src.faith_echo.sdk.tts_client.websockets.connect", make_connect(client)
+        "src.faith_echo.sdk.tts_client.websockets.connect", fake_ws_connect(client)
     )
 
     tts = TTSClient("ws://testserver")
@@ -145,5 +157,8 @@ async def test_tts_client_streams_and_receives_speech(monkeypatch) -> None:
     async def chunks() -> AsyncIterator[TextChunk]:
         yield TextChunk(text="hi", is_final=True, timestamp_ms=1)
 
+    # Act
     results = [r async for r in tts.stream(chunks(), VoiceParams(lang="en"))]
+
+    # Assert
     assert results[0].audio_b64 == "deadbeef"

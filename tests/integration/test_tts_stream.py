@@ -8,6 +8,7 @@ import pytest
 
 @pytest.mark.integration
 def test_tts_service_streams_speech_correctly(monkeypatch) -> None:
+    # Arrange
     module = importlib.import_module("services.tts.main")
 
     async def fake_synthesize_stream(
@@ -24,13 +25,19 @@ def test_tts_service_streams_speech_correctly(monkeypatch) -> None:
     monkeypatch.setattr(module, "synthesize_stream", fake_synthesize_stream)
 
     client = TestClient(module.app)
+
+    # Act
     with client.websocket_connect("/stream") as ws:
         ws.send_json({"lang": "en"})
-        assert ws.receive_json() == {"accepted": True}
+        accepted_response = ws.receive_json()
         ws.send_json({"text": "hello", "is_final": True, "timestamp_ms": 1})
         ws.send_json({"stop": True})
-        assert ws.receive_json() == {
-            "audio_b64": "deadbeef",
-            "is_final": True,
-            "timestamp_ms": 1,
-        }
+        speech_response = ws.receive_json()
+
+    # Assert
+    assert accepted_response == {"accepted": True}
+    assert speech_response == {
+        "audio_b64": "deadbeef",
+        "is_final": True,
+        "timestamp_ms": 1,
+    }
