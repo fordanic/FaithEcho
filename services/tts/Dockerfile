@@ -2,7 +2,9 @@ FROM python:3.12-slim AS base
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 COPY pyproject.toml poetry.lock ./
-RUN pip install --no-cache-dir poetry && \
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir poetry && \
+    poetry self add poetry-plugin-export && \
     poetry export --without-hashes -f requirements.txt > requirements.txt && \
     pip install --no-cache-dir -r requirements.txt
 
