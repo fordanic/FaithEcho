@@ -11,6 +11,15 @@ unit-tests:
 integration-tests:
 	pytest -q tests/integration
 
+e2e-tests:
+	pytest -q tests/e2e
+
+smoke-tests:
+	pytest -q tests/smoke
+
+make contract-tests:
+	pytest -q tests/contracts
+
 tests: 
 	pytest -q tests --cov=src/faith_echo --cov=services
 
