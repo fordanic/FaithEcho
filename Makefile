@@ -20,7 +20,7 @@ smoke-tests:
 make contract-tests:
 	pytest -q tests/contracts
 
-tests: 
+tests:
 	pytest -q tests --cov=src/faith_echo --cov=services
 
 precommit:
