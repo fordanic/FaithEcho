@@ -39,6 +39,17 @@ pact-python = "^2.3.3"
 requires = ["poetry-core>=1.8.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.pytest.ini_options]
+pythonpath = [
+    "src",
+    "services"
+]
+markers = [
+    "integration: slow, uses real services",
+    "e2e: full-stack, slowest",
+    "smoke: quick health probes",
+]
+
 [tool.ruff]
 line-length = 88
 

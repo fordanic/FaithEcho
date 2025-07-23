@@ -12,7 +12,7 @@ integration-tests:
 	pytest -q tests/integration
 
 tests: 
-	pytest -q tests --cov
+	pytest -q tests --cov=src/faith_echo --cov=services
 
 precommit:
 	pre-commit run --all-files
