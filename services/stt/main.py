@@ -14,7 +14,7 @@ from google.cloud.speech_v1.types import (
 )
 from pydantic import BaseModel
 
-from services.utils import add_monitoring
+from utils import add_monitoring
 
 app = FastAPI(title="FaithEcho STT Service")
 

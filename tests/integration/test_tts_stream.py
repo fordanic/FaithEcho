@@ -4,7 +4,10 @@ from typing import AsyncIterator
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 
-def test_tts_service_stream(monkeypatch) -> None:
+import pytest
+
+@pytest.mark.integration
+def test_tts_service_streams_speech_correctly(monkeypatch) -> None:
     module = importlib.import_module("services.tts.main")
 
     async def fake_synthesize_stream(

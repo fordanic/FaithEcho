@@ -4,7 +4,10 @@ from typing import AsyncIterator
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 
-def test_translate_service_stream(monkeypatch) -> None:
+import pytest
+
+@pytest.mark.integration
+def test_translate_service_streams_translations_correctly(monkeypatch) -> None:
     module = importlib.import_module("services.translate.main")
 
     async def fake_translate_stream(

@@ -4,7 +4,10 @@ from typing import AsyncIterator, List
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 
-def test_stt_service_integration(monkeypatch) -> None:
+import pytest
+
+@pytest.mark.integration
+def test_stt_service_receives_audio_and_returns_transcripts(monkeypatch) -> None:
     module = importlib.import_module("services.stt.main")
 
     received: List[bytes] = []

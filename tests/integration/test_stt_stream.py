@@ -4,7 +4,10 @@ from typing import AsyncIterator
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 
-def test_stt_service_stream(monkeypatch) -> None:
+import pytest
+
+@pytest.mark.integration
+def test_stt_service_streams_transcripts_correctly(monkeypatch) -> None:
     module = importlib.import_module("services.stt.main")
 
     async def fake_transcribe(_: AsyncIterator[bytes]):

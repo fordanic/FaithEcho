@@ -3,11 +3,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from services.translate import main
+from translate import main
 
 
 @pytest.mark.asyncio
-async def test_translate_stream(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_translate_stream_returns_correct_translations(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_translate_text(**kwargs):
         return MagicMock(
             translations=[MagicMock(translated_text=kwargs["contents"][0].upper())]

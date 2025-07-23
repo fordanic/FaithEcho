@@ -4,11 +4,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from services.tts import main
+from tts import main
 
 
 @pytest.mark.asyncio
-async def test_synthesize_stream(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_synthesize_stream_returns_correct_speech(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         main.TTS_CLIENT,
         "synthesize_speech",

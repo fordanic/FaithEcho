@@ -9,7 +9,7 @@ from google.cloud import translate_v3 as translate
 from google.cloud.translate_v3.types import TranslateTextGlossaryConfig
 from pydantic import BaseModel
 
-from services.utils import add_monitoring
+from utils import add_monitoring
 
 app = FastAPI(title="FaithEcho TRANSLATE Service")
 

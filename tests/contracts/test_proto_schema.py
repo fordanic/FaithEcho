@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def compile_proto(tmp_path: Path):
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     proto_rel = "faith_echo/proto/language_service.proto"
     subprocess.run(
         [

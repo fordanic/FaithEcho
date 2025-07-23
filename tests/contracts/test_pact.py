@@ -11,7 +11,7 @@ import requests  # type: ignore
         "tts-service",
     ],
 )
-def test_health_contract(tmp_path, service_name: str) -> None:
+def test_health_endpoint_pact_contract(tmp_path, service_name: str) -> None:
     pact = Consumer("health-client").has_pact_with(
         Provider(service_name), pact_dir=str(tmp_path), port=12345
     )

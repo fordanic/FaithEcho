@@ -7,7 +7,7 @@ import pytest
 from starlette.testclient import TestClient
 from typing import Any
 
-from src.faith_echo.sdk import (  # type: ignore[import-untyped]
+from faith_echo.sdk import (  # type: ignore[import-untyped]
     STTClient,
     TranslateClient,
     TTSClient,
@@ -120,8 +120,9 @@ async def test_translate_client(monkeypatch) -> None:
     assert [r.text for r in results] == ["HEJ", "DÅ"]
 
 
+@pytest.mark.integration
 @pytest.mark.asyncio
-async def test_tts_client(monkeypatch) -> None:
+async def test_tts_client_streams_and_receives_speech(monkeypatch) -> None:
     module = importlib.import_module("services.tts.main")
 
     async def fake_tts(chunks: AsyncIterator[TextChunk], params: VoiceParams):

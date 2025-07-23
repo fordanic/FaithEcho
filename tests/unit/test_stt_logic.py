@@ -3,11 +3,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from services.stt import main
+from stt import main
 
 
 @pytest.mark.asyncio
-async def test_transcribe_stream(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_transcribe_stream_returns_correct_transcripts(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_result = MagicMock()
     mock_result.alternatives = [MagicMock(transcript="foo")]
     mock_result.is_final = True
