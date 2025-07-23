@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from stt import main
+from services.stt import main
 
 
 @pytest.mark.asyncio

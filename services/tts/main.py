@@ -6,7 +6,7 @@ import os
 from typing import AsyncIterator
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from utils import add_monitoring
+from services.utils import add_monitoring
 from google.cloud import texttospeech_v1 as tts
 from pydantic import BaseModel
 

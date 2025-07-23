@@ -7,7 +7,7 @@ import pytest
 from starlette.testclient import TestClient
 from typing import Any
 
-from faith_echo.sdk import (  # type: ignore[import-untyped]
+from src.faith_echo.sdk import (  # type: ignore[import-untyped]
     STTClient,
     TranslateClient,
     TTSClient,

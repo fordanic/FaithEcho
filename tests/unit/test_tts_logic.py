@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from tts import main
+from services.tts import main
 
 
 @pytest.mark.asyncio

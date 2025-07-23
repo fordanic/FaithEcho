@@ -14,7 +14,7 @@ from google.cloud.speech_v1.types import (
 )
 from pydantic import BaseModel
 
-from utils import add_monitoring
+from services.utils import add_monitoring
 
 app = FastAPI(title="FaithEcho STT Service")
 
@@ -62,7 +62,8 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
                             text=result.alternatives[0].transcript,
                             is_final=result.is_final,
                             timestamp_ms=int(
-                                result.result_end_time.total_seconds() * 1000
+                                (result.result_end_time.seconds * 1000)
+                                + (result.result_end_time.nanos // 1_000_000)
                             ),
                         )
                     )
