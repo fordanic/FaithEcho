@@ -5,8 +5,26 @@ lint:
 	ruff check .
 	mypy src/faith_echo tests
 
-test:
-	pytest -q
+unit-tests:
+	pytest -q tests/unit
+
+integration-tests:
+	pytest -q tests/integration
+
+e2e-tests:
+	pytest -q tests/e2e
+
+smoke-tests:
+	pytest -q tests/smoke
+
+contract-tests:
+	pytest -q tests/contracts
+
+tests-with-coverage:
+	pytest -q tests --cov=src/faith_echo --cov=services
+
+tests-all:
+	pytest -q tests
 
 precommit:
 	pre-commit run --all-files

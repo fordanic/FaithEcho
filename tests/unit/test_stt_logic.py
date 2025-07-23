@@ -7,7 +7,10 @@ from services.stt import main
 
 
 @pytest.mark.asyncio
-async def test_transcribe_stream(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_transcribe_stream_returns_correct_transcripts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Arrange
     mock_result = MagicMock()
     mock_result.alternatives = [MagicMock(transcript="foo")]
     mock_result.is_final = True
@@ -20,9 +23,12 @@ async def test_transcribe_stream(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_client.streaming_recognize.return_value = [mock_resp, mock_resp]
     monkeypatch.setattr(main.speech, "SpeechClient", lambda: mock_client)
 
-    async def chunks() -> AsyncIterator[bytes]:
+    async def audio_chunks() -> AsyncIterator[bytes]:
         yield b"a"
         yield b"b"
 
-    out = [c async for c in main.transcribe_stream(chunks())]
+    # Act
+    out = [c async for c in main.transcribe_stream(audio_chunks())]
+
+    # Assert
     assert [c.text for c in out] == ["foo", "foo"]

@@ -6,7 +6,7 @@ services:
     ports:
       - "8101:8000"
   translate:
-    build: 
+    build:
       context: .
       dockerfile: ./services/translate/Dockerfile
     ports:

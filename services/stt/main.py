@@ -62,7 +62,8 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
                             text=result.alternatives[0].transcript,
                             is_final=result.is_final,
                             timestamp_ms=int(
-                                result.result_end_time.total_seconds() * 1000
+                                (result.result_end_time.seconds * 1000)
+                                + (result.result_end_time.nanos // 1_000_000)
                             ),
                         )
                     )

@@ -24,6 +24,8 @@ poetry-plugin-export = ">=1.8"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.12.4"
 pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
+pytest-asyncio = "^1.1.0"
 mypy = "^1.17.0"
 pydantic = "^2.11.7"
 pip-audit = "^2.9.0"
@@ -31,16 +33,35 @@ pre-commit = "^3.7.0"
 grpcio-tools = "^1.73.1"
 shellingham = "^1.5.4"
 httpx = "^0.28.1"
-pytest-asyncio = "^0.23.7"
 pact-python = "^2.3.3"
 
 [build-system]
 requires = ["poetry-core>=1.8.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.ruff]
-line-length = 88
-
 [tool.mypy]
 python_version = "3.12"
-strict = true
+mypy_path = ["src", "services"]
+explicit_package_bases = true
+namespace_packages = true
+ignore_missing_imports = false
+check_untyped_defs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+plugins = []
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "."
+]
+markers = [
+    "integration: slow, uses real services",
+    "e2e: full-stack, slowest",
+    "smoke: quick health probes",
+]
+
+[tool.ruff]
+line-length = 88

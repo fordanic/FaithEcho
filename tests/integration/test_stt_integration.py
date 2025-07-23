@@ -4,7 +4,12 @@ from typing import AsyncIterator, List
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
 
-def test_stt_service_integration(monkeypatch) -> None:
+import pytest
+
+
+@pytest.mark.integration
+def test_stt_service_receives_audio_and_returns_transcripts(monkeypatch) -> None:
+    # Arrange
     module = importlib.import_module("services.stt.main")
 
     received: List[bytes] = []
@@ -19,11 +24,16 @@ def test_stt_service_integration(monkeypatch) -> None:
 
     client = TestClient(module.app)
     test_audio = b"testaudio" * 10
+
+    # Act
     with client.websocket_connect("/stream") as ws:
         for i in range(0, len(test_audio), 4):
             ws.send_bytes(test_audio[i : i + 4])
         ws.send_text("stop")
-        assert ws.receive_json()["text"] == "chunk1"
-        assert ws.receive_json()["text"] == "chunk2"
+        first_response = ws.receive_json()
+        second_response = ws.receive_json()
 
+    # Assert
+    assert first_response["text"] == "chunk1"
+    assert second_response["text"] == "chunk2"
     assert b"".join(received) == test_audio
