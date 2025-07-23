@@ -17,11 +17,14 @@ e2e-tests:
 smoke-tests:
 	pytest -q tests/smoke
 
-make contract-tests:
+contract-tests:
 	pytest -q tests/contracts
 
-tests:
+tests-with-coverage:
 	pytest -q tests --cov=src/faith_echo --cov=services
+
+tests-all:
+	pytest -q tests
 
 precommit:
 	pre-commit run --all-files
