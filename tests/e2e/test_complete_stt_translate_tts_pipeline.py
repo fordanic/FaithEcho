@@ -15,7 +15,7 @@ import textwrap
 import wave
 from io import BytesIO
 from pathlib import Path
-from typing import AsyncIterator, Dict, List
+from typing import Any, AsyncIterator, Dict, List
 
 import aiohttp
 import pyaudio
@@ -98,7 +98,7 @@ async def printer_task(queue: asyncio.Queue):
 
     def draw_box(y_pos, title):
         """Draws a box with a title."""
-        border = f"+{"=" * (WIDTH - 2)}+"
+        border = f"+{'=' * (WIDTH - 2)}+"
         print(f"\033[{y_pos};1H{border}", end="")
         print(f"\033[{y_pos};3H {title} ", end="")
         for i in range(1, HEIGHT):
@@ -157,12 +157,12 @@ async def test_complete_stt_translate_tts_pipeline(
     tts_output: Dict[str, List[Dict]] = {"en-US": [], "fr-FR": []}
     audio_to_play: List[Dict] = []
 
-    stt_to_translate_q = asyncio.Queue()
-    translate_to_tts_queues = {
+    stt_to_translate_q: asyncio.Queue = asyncio.Queue()
+    translate_to_tts_queues: Dict[str, asyncio.Queue] = {
         "en-US": asyncio.Queue(),
         "fr-FR": asyncio.Queue(),
     }
-    print_q = asyncio.Queue()
+    print_q: asyncio.Queue = asyncio.Queue()
 
     async def stt_task(ws: aiohttp.ClientWebSocketResponse):
         """Handles STT: sends audio, receives transcriptions, and queues them."""
@@ -206,7 +206,7 @@ async def test_complete_stt_translate_tts_pipeline(
         await ws.send_json({"stop": True})
 
     async def translate_receiver(ws: aiohttp.ClientWebSocketResponse):
-        final_texts = {lang: [] for lang in translate_to_tts_queues}
+        final_texts: Dict[Any, Any] = {lang: [] for lang in translate_to_tts_queues}
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
