@@ -177,14 +177,20 @@ async def test_complete_stt_translate_tts_pipeline(
         await ws.send_json({"text": "stop"})
 
     async def stt_receiver(ws: aiohttp.ClientWebSocketResponse):
+        segment_id = 1
+        revision = 0
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
+                revision += 1
+                data["segment_id"] = segment_id
+                data["revision"] = revision
                 stt_output.append(data)
                 await print_q.put(data | {"type": "stt"})
                 await stt_to_translate_q.put(data)
                 if data.get("is_final"):
-                    break
+                    segment_id += 1
+                    revision = 0
         await stt_to_translate_q.put(None)
 
     async def translate_task(ws: aiohttp.ClientWebSocketResponse):
