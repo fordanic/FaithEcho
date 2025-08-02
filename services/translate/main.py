@@ -62,14 +62,25 @@ async def translate_stream(
     loop = asyncio.get_running_loop()
 
     def do_request(text: str, lang: str) -> str:
-        response = TRANSLATE_CLIENT.translate_text(
+        request = {
+            "parent": PARENT,
+            "contents": [text],
+            "source_language_code": source_lang,
+            "target_language_code": lang,
+            "mime_type": "text/plain",
+        }
+        if GLOSSARY_CONFIG:
+            request["glossary_config"] = GLOSSARY_CONFIG
+        request = translate.TranslateTextRequest(
             parent=PARENT,
             contents=[text],
             source_language_code=source_lang,
             target_language_code=lang,
             mime_type="text/plain",
-            glossary_config=GLOSSARY_CONFIG,
-        )  # type: ignore[call-arg]
+        )
+        if GLOSSARY_CONFIG:
+            request.glossary_config = GLOSSARY_CONFIG
+        response = TRANSLATE_CLIENT.translate_text(request=request)
         return response.translations[0].translated_text
 
     async for chunk in chunks:

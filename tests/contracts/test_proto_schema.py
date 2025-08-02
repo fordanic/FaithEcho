@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def compile_proto(tmp_path: Path):
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     proto_rel = "faith_echo/proto/language_service.proto"
     subprocess.run(
         [
@@ -33,12 +33,16 @@ def compile_proto(tmp_path: Path):
 
 
 def test_language_service_messages_exist(tmp_path: Path) -> None:
+    # Arrange
     pb2 = compile_proto(tmp_path)
-    for name in [
+    expected_messages = [
         "AudioChunk",
         "TextChunk",
         "SpeechChunk",
         "LangRequest",
         "LangResponse",
-    ]:
-        assert hasattr(pb2, name)
+    ]
+
+    # Act & Assert
+    for name in expected_messages:
+        assert hasattr(pb2, name), f"Message {name} not found in protobuf schema"

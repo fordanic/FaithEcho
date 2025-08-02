@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import queue
 import threading
 from typing import AsyncIterator, Iterator
@@ -37,15 +38,6 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
     out_q: queue.Queue[TextChunk | None] = queue.Queue()
 
     def request_gen() -> Iterator[StreamingRecognizeRequest]:
-        config = StreamingRecognitionConfig(
-            config=RecognitionConfig(
-                encoding=RecognitionConfig.AudioEncoding.LINEAR16,
-                sample_rate_hertz=16000,
-                language_code="sv-SE",
-            ),
-            interim_results=True,
-        )
-        yield StreamingRecognizeRequest(streaming_config=config)
         while True:
             data = audio_q.get()
             if data is None:
@@ -55,17 +47,36 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
     def run_recognize() -> None:
         try:
             client = speech.SpeechClient()
-            for resp in client.streaming_recognize(request_gen()):
-                for result in resp.results:
-                    out_q.put(
-                        TextChunk(
-                            text=result.alternatives[0].transcript,
-                            is_final=result.is_final,
-                            timestamp_ms=int(
-                                result.result_end_time.total_seconds() * 1000
-                            ),
+            config = StreamingRecognitionConfig(
+                config=RecognitionConfig(
+                    encoding=RecognitionConfig.AudioEncoding.LINEAR16,
+                    sample_rate_hertz=16000,
+                    language_code="sv-SE",
+                ),
+                interim_results=True,
+            )
+            try:
+                for resp in client.streaming_recognize(  # type: ignore
+                    config=config, requests=request_gen()
+                ):
+                    for result in resp.results:
+                        out_q.put(
+                            TextChunk(
+                                text=result.alternatives[0].transcript,
+                                is_final=result.is_final,
+                                timestamp_ms=int(
+                                    result.result_end_time.total_seconds() * 1000  # type: ignore
+                                ),
+                            )
                         )
-                    )
+            except Exception as e:
+                # Handle stream timeout and other errors gracefully
+                if "Audio Timeout Error" in str(e) or "OUT_OF_RANGE" in str(e):
+                    # Normal stream end - client disconnected or finished
+                    pass
+                else:
+                    # Log unexpected errors but don't crash
+                    logging.exception("Error in speech recognition: %s", e)
         finally:
             out_q.put(None)
 
