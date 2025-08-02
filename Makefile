@@ -23,8 +23,9 @@ contract-tests:
 tests-with-coverage:
 	pytest -q tests --cov=src/faith_echo --cov=services
 
+# All tests but e2e tests
 tests-all:
-	pytest -q tests
+	pytest -q tests/unit tests/integration tests/smoke tests/contracts --cov=src/faith_echo --cov=services
 
 precommit:
 	pre-commit run --all-files

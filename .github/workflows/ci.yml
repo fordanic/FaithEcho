@@ -18,6 +18,12 @@ jobs:
           python-version: "3.12"
           cache: "pip"          # pip wheel cache (complements Poetry cache)
 
+      # ───────────────────────── Misc dependencies ─────────────────────────
+      - name: Install misc dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y portaudio19-dev
+
       # ───────────────────────── Poetry + dependency cache ─────────────────
       - name: Install Poetry
         run: |
@@ -43,7 +49,7 @@ jobs:
         run: poetry run make lint
 
       - name: Unit tests
-        run: poetry run make test
+        run: poetry run make tests-all
 
       - name: Pip audit
         run: |
