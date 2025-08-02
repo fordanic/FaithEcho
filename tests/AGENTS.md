@@ -159,15 +159,12 @@ def test_calculate_discount_handles_rounding():
 
 ## Markers & Selectors
 
-* Register custom markers in `pytest.ini`:
-
-  ```ini
-  [pytest]
-  markers =
-      integration: slow, uses real services
-      e2e: full‑stack, slowest
-      smoke: quick health probes
-  ```
+[tool.pytest.ini_options]
+markers = [
+    "integration: slow, uses real services",
+    "e2e: full-stack, slowest",
+    "smoke: quick health probes",
+]
 * Example: run all fast suites in CI:
   `pytest -m "not (integration or e2e)"`
 
