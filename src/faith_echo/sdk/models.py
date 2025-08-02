@@ -13,6 +13,8 @@ class TextChunk(BaseModel):
     text: str
     is_final: bool
     timestamp_ms: int
+    segment_id: int = 0
+    revision: int = 0
 
 
 class LangRequest(BaseModel):
@@ -48,3 +50,5 @@ class SpeechChunk(BaseModel):
     audio_b64: str
     is_final: bool
     timestamp_ms: int
+    segment_id: int = 0
+    revision: int = 0

@@ -212,9 +212,6 @@ async def test_complete_stt_translate_tts_pipeline(
         await ws.send_json({"stop": True})
 
     async def translate_receiver(ws: aiohttp.ClientWebSocketResponse):
-        final_texts: dict[str, list[str]] = {
-            lang: [] for lang in translate_to_tts_queues
-        }
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
@@ -222,19 +219,19 @@ async def test_complete_stt_translate_tts_pipeline(
                 if lang in translations:
                     translations[lang].append(data)
                     await print_q.put(data | {"type": "translate"})
-                    if data.get("is_final"):
-                        final_texts[lang].append(data["text"])
-
-        for lang, texts in final_texts.items():
-            if texts:
-                full_text = " ".join(texts)
-                last_timestamp = translations[lang][-1].get("timestamp_ms", 0)
-                final_chunk = {
-                    "text": full_text,
-                    "is_final": True,
-                    "timestamp_ms": last_timestamp,
-                }
-                await translate_to_tts_queues[lang].put(final_chunk)
+                    queue = translate_to_tts_queues[lang]
+                    seg_id = data.get("segment_id")
+                    items: list[dict] = []
+                    try:
+                        while True:
+                            item = queue.get_nowait()
+                            if item.get("segment_id") != seg_id:
+                                items.append(item)
+                    except asyncio.QueueEmpty:
+                        pass
+                    for item in items:
+                        queue.put_nowait(item)
+                    await queue.put(data)
 
         for q in translate_to_tts_queues.values():
             await q.put(None)
@@ -256,6 +253,8 @@ async def test_complete_stt_translate_tts_pipeline(
             chunk = await queue.get()
             if chunk is None:
                 break
+            if not chunk.get("is_final"):
+                continue
             await ws.send_json(chunk)
         await ws.send_json({"stop": True})
 
