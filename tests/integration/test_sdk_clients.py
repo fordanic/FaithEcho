@@ -43,6 +43,7 @@ class FakeWS:
         await asyncio.to_thread(self._session.close)  # type: ignore[attr-defined]
 
 
+@pytest.mark.integration
 @pytest.fixture
 def fake_ws_connect():
     def make_connect(client: TestClient):
@@ -66,6 +67,7 @@ def fake_ws_connect():
     return make_connect
 
 
+@pytest.mark.integration
 @pytest.mark.asyncio
 async def test_stt_client(monkeypatch, fake_ws_connect) -> None:
     # Arrange
@@ -95,6 +97,7 @@ async def test_stt_client(monkeypatch, fake_ws_connect) -> None:
     assert [r.text for r in results] == ["a", "b"]
 
 
+@pytest.mark.integration
 @pytest.mark.asyncio
 async def test_translate_client(monkeypatch, fake_ws_connect) -> None:
     # Arrange
