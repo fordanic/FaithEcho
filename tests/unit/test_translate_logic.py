@@ -13,7 +13,7 @@ async def test_translate_stream_returns_correct_translations(
     # Arrange
     def fake_translate_text(request):
         return MagicMock(
-            translations=[MagicMock(translated_text=request["contents"][0].upper())]
+            translations=[MagicMock(translated_text=request.contents[0].upper())]
         )
 
     monkeypatch.setattr(main.TRANSLATE_CLIENT, "translate_text", fake_translate_text)
