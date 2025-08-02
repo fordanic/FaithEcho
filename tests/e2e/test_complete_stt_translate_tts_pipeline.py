@@ -206,7 +206,7 @@ async def test_complete_stt_translate_tts_pipeline(
         await ws.send_json({"stop": True})
 
     async def translate_receiver(ws: aiohttp.ClientWebSocketResponse):
-        final_texts: Dict[Any, Any] = {lang: [] for lang in translate_to_tts_queues}
+        final_texts: dict[str, list[str]] = {lang: [] for lang in translate_to_tts_queues}
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
