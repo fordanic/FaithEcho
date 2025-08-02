@@ -101,15 +101,17 @@ async def test_translate_service(translate_url: str, test_chunks: List[dict]) ->
         assert "lang" in trans, "Missing language code"
         assert "is_final" in trans, "Missing is_final flag"
         assert "timestamp_ms" in trans, "Missing timestamp"
-        assert trans["lang"] in ["en-US", "fr-FR"], (
-            f"Unexpected language: {trans['lang']}"
-        )
+        assert trans["lang"] in [
+            "en-US",
+            "fr-FR",
+        ], f"Unexpected language: {trans['lang']}"
         assert isinstance(trans["text"], str), "Text should be string"
         assert isinstance(trans["is_final"], bool), "is_final should be boolean"
         assert isinstance(trans["timestamp_ms"], int), "timestamp should be integer"
 
     # Verify we got translations in both target languages
     langs_received = {t["lang"] for t in translations}
-    assert langs_received == {"en-US", "fr-FR"}, (
-        "Missing translations for some target languages"
-    )
+    assert langs_received == {
+        "en-US",
+        "fr-FR",
+    }, "Missing translations for some target languages"
