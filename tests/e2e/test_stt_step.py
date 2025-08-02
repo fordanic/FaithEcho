@@ -28,9 +28,9 @@ async def stream_audio(file: Path) -> AsyncIterator[bytes]:
     """Stream audio file content in chunks."""
     CHUNK_SIZE = 1024 * 4  # 4KB chunks
 
-    with open(file, "rb") as wav:
+    with wave.open(str(file), "rb") as wav:
         while True:
-            data = wav.read(CHUNK_SIZE)
+            data = wav.readframes(CHUNK_SIZE)
             if not data:
                 break
             # Add a small delay to simulate real-time streaming
