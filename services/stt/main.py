@@ -75,7 +75,7 @@ async def transcribe_stream(chunks: AsyncIterator[bytes]) -> AsyncIterator[TextC
                     pass
                 else:
                     # Log unexpected errors but don't crash
-                    print(f"Error in speech recognition: {e}", flush=True)
+                    logging.exception("Error in speech recognition: %s", e)
         finally:
             out_q.put(None)
 
