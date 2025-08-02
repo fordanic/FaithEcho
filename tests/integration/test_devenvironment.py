@@ -20,6 +20,7 @@ def test_dev_proxy_script() -> None:
 
     # Act & Assert
     assert script.is_file(), "dev-proxy.sh should exist"
+    assert script.is_file(), "dev-proxy.sh should exist"
     assert script.stat().st_mode & 0o111, "dev-proxy.sh should be executable"
 
 
