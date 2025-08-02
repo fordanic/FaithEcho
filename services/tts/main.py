@@ -62,6 +62,8 @@ async def synthesize_stream(
     audio_config = tts.AudioConfig(
         audio_encoding=tts.AudioEncoding.MP3,
         speaking_rate=params.speaking_rate or 1.0,
+        # Explicitly pin the sample‑rate so the service returns standard MP3 bytes
+        sample_rate_hertz=24_000,
     )
     loop = asyncio.get_running_loop()
 

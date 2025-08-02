@@ -3,7 +3,7 @@
 lint:
 	ruff format --check
 	ruff check .
-	mypy src/faith_echo tests
+	mypy src/faith_echo services tests
 
 unit-tests:
 	pytest -q tests/unit

@@ -8,6 +8,9 @@ from collections.abc import Generator
 import pytest
 from starlette.testclient import TestClient  # type: ignore[import-not-found]
 
+# Configure pytest-asyncio to use asyncio as the default event loop
+pytest.register_assert_rewrite("pytest_asyncio")
+
 
 @pytest.fixture(params=["stt", "translate", "tts"])
 def client(request: pytest.FixtureRequest) -> Generator[TestClient, None, None]:

@@ -3,17 +3,41 @@ services:
     build:
       context: .
       dockerfile: ./services/stt/Dockerfile
+    env_file: .env
     ports:
       - "8101:8000"
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/creds/google-credentials.json
+    volumes:
+      - type: bind
+        source: ${GOOGLE_APPLICATION_CREDENTIALS}
+        target: /creds/google-credentials.json
+        read_only: true
   translate:
     build:
       context: .
       dockerfile: ./services/translate/Dockerfile
+    env_file: .env
     ports:
       - "8102:8000"
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/creds/google-credentials.json
+    volumes:
+      - type: bind
+        source: ${GOOGLE_APPLICATION_CREDENTIALS}
+        target: /creds/google-credentials.json
+        read_only: true
   tts:
     build:
       context: .
       dockerfile: ./services/tts/Dockerfile
+    env_file: .env
     ports:
       - "8103:8000"
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/creds/google-credentials.json
+    volumes:
+      - type: bind
+        source: ${GOOGLE_APPLICATION_CREDENTIALS}
+        target: /creds/google-credentials.json
+        read_only: true
