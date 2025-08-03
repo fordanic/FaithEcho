@@ -44,3 +44,6 @@ proto:
 		-I src/faith_echo/proto \
 		--python_out=src/faith_echo/proto \
 		src/faith_echo/proto/language_service.proto
+
+dev-setup:
+	./scripts/dev_setup.sh
