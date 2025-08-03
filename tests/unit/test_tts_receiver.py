@@ -1,7 +1,7 @@
 import base64
 
-from faith_echo.sdk.models import SpeechChunk
-from faith_echo.sdk.tts_receiver import TTSReceiver
+from src.faith_echo.sdk.models import SpeechChunk  # type: ignore[import-untyped]
+from src.faith_echo.sdk.tts_receiver import TTSReceiver  # type: ignore[import-untyped]
 
 
 def make_chunk(seg: int, rev: int, ts: int) -> SpeechChunk:

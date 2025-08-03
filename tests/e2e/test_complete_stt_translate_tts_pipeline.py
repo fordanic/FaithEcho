@@ -21,7 +21,7 @@ import aiohttp
 import pyaudio
 import pytest
 from pydub import AudioSegment
-from faith_echo.sdk import SpeechChunk, TTSReceiver
+from src.faith_echo.sdk import SpeechChunk, TTSReceiver  # type: ignore[import-untyped]
 
 
 @pytest.fixture
