@@ -37,6 +37,8 @@ class TextChunk(BaseModel):
     text: str
     is_final: bool
     timestamp_ms: int
+    segment_id: int = 0
+    revision: int = 0
 
 
 class LangRequest(BaseModel):
@@ -87,6 +89,8 @@ async def translate_stream(
                 text=translated_text,
                 is_final=chunk.is_final,
                 timestamp_ms=chunk.timestamp_ms,
+                segment_id=chunk.segment_id,
+                revision=chunk.revision,
                 lang=lang,
             )
 

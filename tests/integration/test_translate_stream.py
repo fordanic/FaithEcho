@@ -47,10 +47,14 @@ def test_translate_service_streams_translations_correctly(monkeypatch) -> None:
         "is_final": False,
         "timestamp_ms": 1,
         "lang": "en",
+        "revision": 0,
+        "segment_id": 0,
     }
     assert second_translation == {
         "text": "SLUT",
         "is_final": True,
         "timestamp_ms": 2,
         "lang": "en",
+        "revision": 0,
+        "segment_id": 0,
     }
