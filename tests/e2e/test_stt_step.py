@@ -73,9 +73,9 @@ async def test_stt_service(audio_file: Path, stt_url: str) -> None:
 
     # Verify transcription results
     assert len(transcriptions) > 0, "No transcription received"
-    assert any(
-        t.get("is_final", False) for t in transcriptions
-    ), "No final transcription received"
+    assert any(t.get("is_final", False) for t in transcriptions), (
+        "No final transcription received"
+    )
 
     # Verify transcription structure
     for trans in transcriptions:

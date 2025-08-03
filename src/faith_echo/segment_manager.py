@@ -103,8 +103,11 @@ class SegmentManager:
     async def get_translation_chunk(self, lang: str) -> TranslatedChunk | None:
         """Retrieve next translated chunk for a language."""
 
-        queue = self._translate_queues.setdefault(lang, asyncio.Queue())
-        return await queue.get()
+        if lang not in self._translate_queues:
+            raise ValueError(
+                f"Attempted to get translation chunk for unexpected language: {lang}"
+            )
+        return await self._translate_queues[lang].get()
 
     def record_tts_chunk(self, chunk: SpeechChunk, lang: str) -> None:
         """Update status for a TTS output chunk."""
