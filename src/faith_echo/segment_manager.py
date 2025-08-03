@@ -52,10 +52,13 @@ class SegmentManager:
         if stage == "stt":
             seg.stt = StageState(revision, timestamp_ms, is_final)
         elif stage == "translate":
-            assert lang is not None
+        elif stage == "translate":
+            if lang is None:
+                raise ValueError("'lang' is required for 'translate' stage")
             seg.translations[lang] = StageState(revision, timestamp_ms, is_final)
         elif stage == "tts":
-            assert lang is not None
+            if lang is None:
+                raise ValueError("'lang' is required for 'tts' stage")
             seg.tts[lang] = StageState(revision, timestamp_ms, is_final)
         else:  # pragma: no cover - defensive
             raise ValueError(f"Unknown stage {stage}")
