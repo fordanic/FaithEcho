@@ -21,7 +21,13 @@ import aiohttp
 import pyaudio
 import pytest
 from pydub import AudioSegment
-from src.faith_echo.sdk import SpeechChunk, TTSReceiver  # type: ignore[import-untyped]
+from src.faith_echo.segment_manager import SegmentManager
+from src.faith_echo.sdk import (
+    SpeechChunk,
+    TTSReceiver,
+    TextChunk,
+    TranslatedChunk,
+)  # type: ignore[import-untyped]
 
 
 @pytest.fixture
@@ -158,11 +164,7 @@ async def test_complete_stt_translate_tts_pipeline(
     tts_output: Dict[str, List[Dict]] = {"en-US": [], "fr-FR": []}
     audio_to_play: List[Dict] = []
 
-    stt_to_translate_q: asyncio.Queue = asyncio.Queue()
-    translate_to_tts_queues: Dict[str, asyncio.Queue] = {
-        "en-US": asyncio.Queue(),
-        "fr-FR": asyncio.Queue(),
-    }
+    manager = SegmentManager(["en-US", "fr-FR"])
     print_q: asyncio.Queue = asyncio.Queue()
 
     async def stt_task(ws: aiohttp.ClientWebSocketResponse):
@@ -188,11 +190,11 @@ async def test_complete_stt_translate_tts_pipeline(
                 data["revision"] = revision
                 stt_output.append(data)
                 await print_q.put(data | {"type": "stt"})
-                await stt_to_translate_q.put(data)
+                await manager.put_stt_chunk(TextChunk(**data))
                 if data.get("is_final"):
                     segment_id += 1
                     revision = 0
-        await stt_to_translate_q.put(None)
+        await manager.put_stt_chunk(None)
 
     async def translate_task(ws: aiohttp.ClientWebSocketResponse):
         """Handles translation: sends transcriptions, receives translations."""
@@ -206,10 +208,10 @@ async def test_complete_stt_translate_tts_pipeline(
 
     async def translate_sender(ws: aiohttp.ClientWebSocketResponse):
         while True:
-            chunk = await stt_to_translate_q.get()
+            chunk = await manager.get_stt_chunk()
             if chunk is None:
                 break
-            await ws.send_json(chunk)
+            await ws.send_json(chunk.model_dump())
         await ws.send_json({"stop": True})
 
     async def translate_receiver(ws: aiohttp.ClientWebSocketResponse):
@@ -220,44 +222,29 @@ async def test_complete_stt_translate_tts_pipeline(
                 if lang in translations:
                     translations[lang].append(data)
                     await print_q.put(data | {"type": "translate"})
-                    queue = translate_to_tts_queues[lang]
-                    seg_id = data.get("segment_id")
-                    items: list[dict] = []
-                    try:
-                        while True:
-                            item = queue.get_nowait()
-                            if item.get("segment_id") != seg_id:
-                                items.append(item)
-                    except asyncio.QueueEmpty:
-                        pass
-                    for item in items:
-                        queue.put_nowait(item)
-                    await queue.put(data)
+                    await manager.put_translation_chunk(TranslatedChunk(**data))
 
-        for q in translate_to_tts_queues.values():
-            await q.put(None)
+        await manager.put_translation_chunk(None)
 
-    async def tts_task(
-        ws: aiohttp.ClientWebSocketResponse, lang: str, tts_queue: asyncio.Queue
-    ):
+    async def tts_task(ws: aiohttp.ClientWebSocketResponse, lang: str):
         """Handles TTS: sends text, receives audio."""
         await ws.send_json({"lang": lang, "speaking_rate": 1.0})
         resp = await ws.receive_json()
         assert resp.get("accepted") is True
 
         receiver_state = TTSReceiver()
-        sender_task = asyncio.create_task(tts_sender(ws, tts_queue))
+        sender_task = asyncio.create_task(tts_sender(ws, lang))
         receiver_task = asyncio.create_task(tts_receiver(ws, lang, receiver_state))
         await asyncio.gather(sender_task, receiver_task)
 
-    async def tts_sender(ws: aiohttp.ClientWebSocketResponse, queue: asyncio.Queue):
+    async def tts_sender(ws: aiohttp.ClientWebSocketResponse, lang: str):
         while True:
-            chunk = await queue.get()
+            chunk = await manager.get_translation_chunk(lang)
             if chunk is None:
                 break
-            if not chunk.get("is_final"):
+            if not chunk.is_final:
                 continue
-            await ws.send_json(chunk)
+            await ws.send_json(chunk.model_dump())
         await ws.send_json({"stop": True})
 
     async def tts_receiver(
@@ -266,7 +253,9 @@ async def test_complete_stt_translate_tts_pipeline(
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
-                state.process(SpeechChunk(**data))
+                chunk = SpeechChunk(**data)
+                state.process(chunk)
+                manager.record_tts_chunk(chunk, lang)
                 tts_output[lang] = [c.model_dump() for c in state.ordered_segments()]
                 if play_audio:
                     audio_bytes = base64.b64decode(data["audio_b64"])
@@ -289,12 +278,8 @@ async def test_complete_stt_translate_tts_pipeline(
                         await asyncio.gather(
                             stt_task(stt_ws),
                             translate_task(trans_ws),
-                            tts_task(
-                                tts_ws_en, "en-US", translate_to_tts_queues["en-US"]
-                            ),
-                            tts_task(
-                                tts_ws_fr, "fr-FR", translate_to_tts_queues["fr-FR"]
-                            ),
+                            tts_task(tts_ws_en, "en-US"),
+                            tts_task(tts_ws_fr, "fr-FR"),
                         )
 
     await print_q.put(None)

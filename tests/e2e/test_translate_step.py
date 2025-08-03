@@ -91,9 +91,9 @@ async def test_translate_service(translate_url: str, test_chunks: List[dict]) ->
 
     # Each source chunk should have translations for both target languages
     expected_count = len(test_chunks) * 2  # 2 target languages
-    assert len(translations) >= expected_count, (
-        f"Expected at least {expected_count} translations"
-    )
+    assert (
+        len(translations) >= expected_count
+    ), f"Expected at least {expected_count} translations"
 
     # Verify translation structure
     for trans in translations:

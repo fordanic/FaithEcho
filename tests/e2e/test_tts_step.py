@@ -131,9 +131,9 @@ async def test_tts_service(
 
     # Verify timestamps are monotonically increasing
     timestamps = [chunk["timestamp_ms"] for chunk in audio_chunks]
-    assert all(t1 <= t2 for t1, t2 in zip(timestamps, timestamps[1:])), (
-        "Timestamps not in order"
-    )
+    assert all(
+        t1 <= t2 for t1, t2 in zip(timestamps, timestamps[1:])
+    ), "Timestamps not in order"
     # Ensure the synthesis stream ended correctly
     assert audio_chunks[-1]["is_final"] is True, "Last chunk should be marked as final"
 
