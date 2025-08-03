@@ -16,12 +16,11 @@ def test_devcontainer_exists() -> None:
 @pytest.mark.integration
 def test_dev_proxy_script() -> None:
     # Arrange
-    script = REPO_ROOT / "scripts" / "dev-proxy.sh"
+    script = REPO_ROOT / "scripts" / "dev_proxy.sh"
 
     # Act & Assert
-    assert script.is_file(), "dev-proxy.sh should exist"
-    assert script.is_file(), "dev-proxy.sh should exist"
-    assert script.stat().st_mode & 0o111, "dev-proxy.sh should be executable"
+    assert script.is_file(), "dev_proxy.sh should exist"
+    assert script.stat().st_mode & 0o111, "dev_proxy.sh should be executable"
 
 
 @pytest.mark.integration

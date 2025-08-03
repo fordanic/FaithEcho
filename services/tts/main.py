@@ -31,6 +31,8 @@ class TextChunk(BaseModel):
     text: str
     is_final: bool
     timestamp_ms: int
+    segment_id: int = 0
+    revision: int = 0
 
 
 class VoiceParams(BaseModel):
@@ -47,6 +49,8 @@ class SpeechChunk(BaseModel):
     audio_b64: str
     is_final: bool
     timestamp_ms: int
+    segment_id: int = 0
+    revision: int = 0
 
 
 async def synthesize_stream(
@@ -81,6 +85,8 @@ async def synthesize_stream(
             audio_b64=base64.b64encode(audio).decode(),
             is_final=chunk.is_final,
             timestamp_ms=chunk.timestamp_ms,
+            segment_id=chunk.segment_id,
+            revision=chunk.revision,
         )
 
 
