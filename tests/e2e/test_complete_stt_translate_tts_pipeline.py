@@ -219,23 +219,19 @@ async def test_complete_stt_translate_tts_pipeline(
                 if lang in translations:
                     translations[lang].append(data)
                     await print_q.put(data | {"type": "translate"})
-queue = translate_to_tts_queues[lang]
-lock = translate_queue_locks[lang] # Assuming locks are accessible here
-seg_id = data.get("segment_id")
-
-async with lock:
-    items: list[dict] = []
-    try:
-        while True:
-            item = queue.get_nowait()
-            if item.get("segment_id") != seg_id:
-                items.append(item)
-    except asyncio.QueueEmpty:
-        pass
-    for item in items:
-        queue.put_nowait(item)
-    # Use put_nowait inside the lock to avoid yielding control
-    queue.put_nowait(data)
+                    queue = translate_to_tts_queues[lang]
+                    seg_id = data.get("segment_id")
+                    items: list[dict] = []
+                    try:
+                        while True:
+                            item = queue.get_nowait()
+                            if item.get("segment_id") != seg_id:
+                                items.append(item)
+                    except asyncio.QueueEmpty:
+                        pass
+                    for item in items:
+                        queue.put_nowait(item)
+                    await queue.put(data)
 
         for q in translate_to_tts_queues.values():
             await q.put(None)
