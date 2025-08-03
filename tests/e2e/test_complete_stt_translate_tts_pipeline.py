@@ -21,6 +21,7 @@ import aiohttp
 import pyaudio
 import pytest
 from pydub import AudioSegment
+from faith_echo.sdk import SpeechChunk, TTSReceiver
 
 
 @pytest.fixture
@@ -244,8 +245,9 @@ async def test_complete_stt_translate_tts_pipeline(
         resp = await ws.receive_json()
         assert resp.get("accepted") is True
 
+        receiver_state = TTSReceiver()
         sender_task = asyncio.create_task(tts_sender(ws, tts_queue))
-        receiver_task = asyncio.create_task(tts_receiver(ws, lang))
+        receiver_task = asyncio.create_task(tts_receiver(ws, lang, receiver_state))
         await asyncio.gather(sender_task, receiver_task)
 
     async def tts_sender(ws: aiohttp.ClientWebSocketResponse, queue: asyncio.Queue):
@@ -258,11 +260,14 @@ async def test_complete_stt_translate_tts_pipeline(
             await ws.send_json(chunk)
         await ws.send_json({"stop": True})
 
-    async def tts_receiver(ws: aiohttp.ClientWebSocketResponse, lang: str):
+    async def tts_receiver(
+        ws: aiohttp.ClientWebSocketResponse, lang: str, state: TTSReceiver
+    ):
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = json.loads(msg.data)
-                tts_output[lang].append(data)
+                state.process(SpeechChunk(**data))
+                tts_output[lang] = [c.model_dump() for c in state.ordered_segments()]
                 if play_audio:
                     audio_bytes = base64.b64decode(data["audio_b64"])
                     audio_to_play.append(

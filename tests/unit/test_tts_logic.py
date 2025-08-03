@@ -19,7 +19,13 @@ async def test_synthesize_stream_returns_correct_speech(
     )
 
     async def text_chunks() -> AsyncIterator[main.TextChunk]:
-        yield main.TextChunk(text="hi", is_final=True, timestamp_ms=1)
+        yield main.TextChunk(
+            text="hi",
+            is_final=True,
+            timestamp_ms=1,
+            segment_id=5,
+            revision=2,
+        )
 
     params = main.VoiceParams(lang="en")
 
@@ -29,3 +35,5 @@ async def test_synthesize_stream_returns_correct_speech(
     # Assert
     expected = base64.b64encode(b"aud").decode()
     assert out[0].audio_b64 == expected
+    assert out[0].segment_id == 5
+    assert out[0].revision == 2
