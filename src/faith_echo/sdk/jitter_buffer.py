@@ -25,7 +25,7 @@ class SegmentJitterBuffer:
         """
 
         self._buffers: Dict[str, Dict[int, SpeechChunk]] = {
-            lang: {} for lang in languages
+            lang: {} for lang in set(languages)
         }
 
     def process(self, lang: str, chunk: SpeechChunk) -> List[Dict[str, SpeechChunk]]:
