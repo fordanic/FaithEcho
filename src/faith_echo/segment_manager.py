@@ -52,7 +52,6 @@ class SegmentManager:
         if stage == "stt":
             seg.stt = StageState(revision, timestamp_ms, is_final)
         elif stage == "translate":
-        elif stage == "translate":
             if lang is None:
                 raise ValueError("'lang' is required for 'translate' stage")
             seg.translations[lang] = StageState(revision, timestamp_ms, is_final)
